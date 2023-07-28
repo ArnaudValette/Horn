@@ -1,26 +1,27 @@
 {
+    "files":["src/types/global.d.ts", "./src/parser/ParsableString.ts"],
+      "include": ["node_modules/@types","src/**/*"] ,
+      "exclude": ["**/*.spec.ts", "out"],
   "compilerOptions": {
 
-      "include": ["node_modules/@types","src/index.ts", "src/parser/Parser.ts", "src/parser/ParserState.ts","src/types/global.d.ts"] ,
-      "exclude": ["**/*.spec.ts", "out"],
-    "target": "es6",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "lib": ["es6"],                                      /* Specify a set of bundled library declaration files that describe the target runtime environment. */
-    "module": "commonjs",                                /* Specify what module code is generated. */
-    "rootDir": "src",                                    /* Specify the root folder within your source files. */
-     "moduleResolution": "node",                     /* Specify how TypeScript looks up a file from a given module specifier. */
-    "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
-      "paths": {"*": ["node_modules/*","src/types/*.d.ts"]},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
-    "typeRoots": ["node_modules/@types"],                                  /* Specify multiple folders that act like './node_modules/@types'. */
-    "types": ["node"],                                      /* Specify type package names to be included without being referenced in a source file. */
-    "resolveJsonModule": true,                           /* Enable importing .json files. */
+    "target": "es6",                                  
+    "lib": ["es6"],                                  
+    "module": "commonjs",                           
+    "rootDir": "src",                              
+     "moduleResolution": "node",                  
+    "baseUrl": "./",                             
+      "paths": {"*": ["node_modules/*","src/types/*.d.ts"]},                                      
+      "typeRoots": ["node_modules/@types", "src/types"],                                  
+    "types": ["node"],                                      
+    "resolveJsonModule": true,                           
 
-    "allowJs": true,                                     /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
+    "allowJs": true,                                    
 
-    "outDir": "build",                                   /* Specify an output folder for all emitted files. */
-    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
-    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
-    "strict": true,                                      /* Enable all strict type-checking options. */
-    "noImplicitAny": true,                               /* Enable error reporting for expressions and declarations with an implied 'any' type. */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "outDir": "build",                                 
+    "esModuleInterop": true,                          
+    "forceConsistentCasingInFileNames": true,        
+    "strict": true,                                 
+    "noImplicitAny": true,                         
+    "skipLibCheck": true                          
   }
 }

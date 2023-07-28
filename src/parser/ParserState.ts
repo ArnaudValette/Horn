@@ -6,6 +6,7 @@ class ParserState implements _ParserState {
   lastSrc: HornNode | null
   listMode: Boolean
   srcMode: Boolean
+  count: Int = 0
   constructor() {
     this.headings = {}
     this.lists = {}
@@ -16,6 +17,9 @@ class ParserState implements _ParserState {
     this.srcMode = false
   }
 
+  inc() {
+    this.count += 1
+  }
   resetMode() {
     this.srcMode = false
     this.listMode = false
@@ -35,3 +39,4 @@ class ParserState implements _ParserState {
     this.lastSrc = h
   }
 }
+export default ParserState

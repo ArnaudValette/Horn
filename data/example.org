@@ -1,0 +1,27 @@
+* Example file
+- With list
+- and also
+  - nested list
+  - ok
+- and going down
+
+
+
+1. num
+2. list
+3. and also nested :
+   1. ok
+      3. okoko
+
+** Subtitle
+there are paragraphs
+*** subsub
+paragraphs
+** sub
+sadfkj
+sdaflkj
+sdfjkl
+ksjdf
+lkjsdf
+* Title
+**** should be children of precedent first level heading
