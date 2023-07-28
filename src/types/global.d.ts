@@ -24,10 +24,10 @@ type GlitterNode = GenericNode & {
   start: Int
   end: Int
 }
-type HornNode = GenericNode & {
+interface HornNode extends GenericNode {
   children: Array<HornNode>
   id: Int
-  parent: HornNode
+  parent: HornNode | null
   level: Int
   glitterNodes: Array<GlitterNode>
   tags: Tags

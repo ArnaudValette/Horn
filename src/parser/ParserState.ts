@@ -1,4 +1,8 @@
+import { HornNode } from "../horn/HornNode"
+import { ParsingResult } from "./Parser"
+
 class ParserState implements _ParserState {
+  roots: Array<HornNode>
   headings: Obj<HornNode>
   lists: Obj<HornNode>
   lastHeading: HornNode | null
@@ -8,6 +12,7 @@ class ParserState implements _ParserState {
   srcMode: Boolean
   count: Int = 0
   constructor() {
+    this.roots = []
     this.headings = {}
     this.lists = {}
     this.lastHeading = null
@@ -24,19 +29,15 @@ class ParserState implements _ParserState {
     this.srcMode = false
     this.listMode = false
   }
-  appendHeading(h: HornNode) {
-    this.resetMode()
-    this.headings[h.level] = h
-    this.lastHeading = h
+  appendRoot(p: ParsingResult) {
+    const h = new HornNode(this.count, p.level, p.type as string, p.text)
   }
-  appendList(h: HornNode) {
-    this.listMode = true
-    this.lists[h.level] = h
-    this.lastList = h
-  }
-  appendSrc(h: HornNode) {
-    this.srcMode = true
-    this.lastSrc = h
-  }
+  appendHeading(p: ParsingResult) {}
+  appendList(p: ParsingResult) {}
+  appendNList(p: ParsingResult) {}
+  appendBSrc(p: ParsingResult) {}
+  appendESrc(p: ParsingResult) {}
+  appendNSrc(p: ParsingResult) {}
+  appendParagraph(p: ParsingResult) {}
 }
 export default ParserState

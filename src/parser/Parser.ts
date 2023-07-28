@@ -1,5 +1,5 @@
-import * as fs from "fs"
 import ParserState from "./ParserState"
+
 import { ParsableString } from "./ParsableString"
 
 export type R = RegExpExecArray | null
@@ -42,14 +42,30 @@ class Parser {
   }
 
   #heading(p: ParsingResult) {
-    console.log(p.text)
+    if (p.level === 1) {
+      this.state.appendRoot(p)
+    } else {
+      this.state.appendHeading(p)
+    }
   }
-  #list(p: ParsingResult) {}
-  #nlist(p: ParsingResult) {}
-  #bsrc(p: ParsingResult) {}
-  #nsrc(p: ParsingResult) {}
-  #esrc(p: ParsingResult) {}
-  #paragraph(p: ParsingResult) {}
+  #list(p: ParsingResult) {
+    this.state.appendList(p)
+  }
+  #nlist(p: ParsingResult) {
+    this.state.appendNList(p)
+  }
+  #bsrc(p: ParsingResult) {
+    this.state.appendBSrc(p)
+  }
+  #nsrc(p: ParsingResult) {
+    this.state.appendNSrc(p)
+  }
+  #esrc(p: ParsingResult) {
+    this.state.appendESrc(p)
+  }
+  #paragraph(p: ParsingResult) {
+    this.state.appendParagraph(p)
+  }
 }
 
 export default Parser
