@@ -12,4 +12,5 @@ fs.readFile("./data/example.org", (err, data) => {
     return console.log(err)
   }
   x.parseOrg(data)
+  console.log(x.state.lists)
 })

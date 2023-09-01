@@ -24,6 +24,7 @@ type GlitterNode = GenericNode & {
   start: Int
   end: Int
 }
+
 interface HornNode extends GenericNode {
   children: Array<HornNode>
   id: Int
