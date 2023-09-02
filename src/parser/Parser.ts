@@ -52,7 +52,8 @@ class Parser {
     this.state.appendList(p)
   }
   #nlist(p: ParsingResult) {
-    this.state.appendNList(p)
+    // I think we should treat em like normal list for now ?
+    this.state.appendList(p)
   }
   #bsrc(p: ParsingResult) {
     this.state.appendBSrc(p)

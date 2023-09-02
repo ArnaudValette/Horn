@@ -76,8 +76,26 @@ class ParserState implements _ParserState {
     this.listMode = true
     this.inc()
   }
-  appendNList(p: ParsingResult) {}
-  appendBSrc(p: ParsingResult) {}
+  appendNList(p: ParsingResult) {
+    /*
+       a numbered list works exactly like a common list, I think...
+     */
+  }
+  appendBSrc(p: ParsingResult) {
+    if (this.srcMode) {
+      // obviously
+      this.appendParagraph(p)
+    }
+    this.listMode = false
+    this.srcMode = true
+    const h = this.HN(p)
+    // An src block is always the children of the last heading
+    // if it is not a root node
+    if (Object.keys(this.headings).length === 0) {
+      return this.roots.push(h)
+    }
+    return this.lastHeading?.children.push(h)
+  }
   appendESrc(p: ParsingResult) {}
   appendNSrc(p: ParsingResult) {}
   appendParagraph(p: ParsingResult) {}
