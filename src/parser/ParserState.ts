@@ -84,7 +84,7 @@ class ParserState implements _ParserState {
   appendBSrc(p: ParsingResult) {
     if (this.srcMode) {
       // obviously
-      this.appendParagraph(p)
+      return this.appendParagraph(p)
     }
     this.listMode = false
     this.srcMode = true
@@ -96,7 +96,12 @@ class ParserState implements _ParserState {
     }
     return this.lastHeading?.children.push(h)
   }
-  appendESrc(p: ParsingResult) {}
+  appendESrc(p: ParsingResult) {
+    if (this.srcMode) {
+    } else {
+      return this.appendParagraph(p)
+    }
+  }
   appendNSrc(p: ParsingResult) {}
   appendParagraph(p: ParsingResult) {}
 
