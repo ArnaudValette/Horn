@@ -91,19 +91,39 @@ class ParserState implements _ParserState {
     const h = this.HN(p)
     // An src block is always the children of the last heading
     // if it is not a root node
+    this.lastSrc = h
     if (Object.keys(this.headings).length === 0) {
       return this.roots.push(h)
     }
     return this.lastHeading?.children.push(h)
   }
+
   appendESrc(p: ParsingResult) {
+    // you don't need another node
     if (this.srcMode) {
-    } else {
-      return this.appendParagraph(p)
+      return (this.srcMode = false)
     }
+    this.resetMode()
+    return this.appendParagraph(p)
   }
-  appendNSrc(p: ParsingResult) {}
-  appendParagraph(p: ParsingResult) {}
+  appendNSrc(p: ParsingResult) {
+    if (this.srcMode && this.lastSrc) {
+      return this.lastSrc.tags.push(`name:${p.text}`)
+    }
+    this.resetMode()
+    return this.appendParagraph(p)
+  }
+  appendParagraph(p: ParsingResult) {
+    const h = this.HN(p)
+    if (this.srcMode && this.lastSrc) {
+      return this.lastSrc.children.push(h)
+    }
+    this.resetMode()
+    if (Object.entries(this.headings).length === 0) {
+      return this.roots.push(h)
+    }
+    return this.lastHeading?.children.push(h)
+  }
 
   mostRecentHeading(level: Int) {
     let result
