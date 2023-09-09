@@ -27,6 +27,8 @@ class Parser {
       eSrc: this.#esrc,
       nSrc: this.#nsrc,
       paragraph: this.#paragraph,
+      tableSep: this.#tableSep,
+      table: this.#table,
     }
   }
 
@@ -63,6 +65,12 @@ class Parser {
   }
   #esrc(p: ParsingResult) {
     this.state.appendESrc(p)
+  }
+  #tableSep(p: ParsingResult){
+    this.state.appendTableSep(p)
+  }
+  #table(p:ParsingResult){
+    this.state.appendTable(p)
   }
   #paragraph(p: ParsingResult) {
     this.state.appendParagraph(p)

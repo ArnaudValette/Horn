@@ -46,7 +46,11 @@ export class ParsableString extends String {
   nSrc = (): NextMethod | ParsingResult =>
     this.parse("nSrc", this.eSrc.bind(this))
   eSrc = (): NextMethod | ParsingResult =>
-    this.parse("eSrc", this.Paragraph.bind(this))
+    this.parse("eSrc", this.tSep.bind(this))
+  tSep = () : NextMethod | ParsingResult =>
+    this.parse("tableSeparator", this.Table.bind(this))
+  Table = ():NextMethod | ParsingResult =>
+    this.parse("table", this.Paragraph.bind(this))
   Paragraph = (): ParsingResult => ({
     level: 0,
     text: this.toString(),
