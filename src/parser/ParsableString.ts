@@ -8,6 +8,8 @@ export class ParsableString extends String {
     bSrc: /^#\+begin_src/,
     eSrc: /^#\+end_src/,
     nSrc: /^#\+name:/,
+    table: /^(\|.*)+\|$/,
+    tableSeparator: /^\|(-+\+)+-+\|$/, 
   }
   constructor(s: string) {
     super(s)
