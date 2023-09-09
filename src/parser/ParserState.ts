@@ -8,6 +8,7 @@ class ParserState implements _ParserState {
   lastHeading: HornNode | null
   lastList: HornNode | null
   lastSrc: HornNode | null
+  table: Table 
   listMode: Boolean
   srcMode: Boolean
   count: Int = 0
@@ -20,6 +21,7 @@ class ParserState implements _ParserState {
     this.lastList = null
     this.lastSrc = null
     this.listMode = false
+    this.table = new Table()
     this.srcMode = false
   }
 
@@ -127,6 +129,11 @@ class ParserState implements _ParserState {
       return this.roots.push(h)
     }
     return this.lastHeading?.children.push(h)
+  }
+
+  appendTableSep(p: ParsingResult ){
+  }
+  appendTable(p:ParsingResult){
   }
 
   mostRecentHeading(level: Int) {
