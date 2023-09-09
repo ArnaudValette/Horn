@@ -8,8 +8,9 @@ type Int = number
 type Key = string | number | symbol
 type Obj<T> = Record<Key, T>
 type Tag = string
+type TableRowType = "row" | "first-row" | "ruler"
 type Tags = Array<Tag>
-
+type Array2D<T> = Array<Array<T>> 
 type HornType = string
 type GlitterType = string
 
