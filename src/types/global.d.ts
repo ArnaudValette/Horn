@@ -10,7 +10,7 @@ type Obj<T> = Record<Key, T>
 type Tag = string
 type TableRowType = "row" | "first-row" | "ruler"
 type Tags = Array<Tag>
-type Array2D<T> = Array<Array<T>> 
+type Array2D<T> = Array<Array<T>>
 type HornType = string
 type GlitterType = string
 
@@ -27,7 +27,7 @@ type GlitterNode = GenericNode & {
 }
 
 interface HornNode extends GenericNode {
-  children: Array<HornNode>
+  children: Array<HornNode | Array2D<string>>
   id: Int
   parent: HornNode | null
   level: Int
