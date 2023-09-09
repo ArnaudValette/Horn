@@ -1,14 +1,16 @@
+import Table from "../horn/Table"
 import { HornNode } from "../horn/HornNode"
 import { ParsingResult } from "./Parser"
 
 class ParserState implements _ParserState {
-  roots: Array<HornNode>
+  roots: Array<HornNode | Array2D<string>>
   headings: Obj<HornNode>
   lists: Obj<HornNode>
   lastHeading: HornNode | null
   lastList: HornNode | null
   lastSrc: HornNode | null
-  table: Table 
+  table: Table
+  tableMode: Boolean
   listMode: Boolean
   srcMode: Boolean
   count: Int = 0
@@ -20,6 +22,7 @@ class ParserState implements _ParserState {
     this.lastHeading = null
     this.lastList = null
     this.lastSrc = null
+    this.tableMode = false
     this.listMode = false
     this.table = new Table()
     this.srcMode = false
@@ -28,13 +31,48 @@ class ParserState implements _ParserState {
   inc() {
     this.count += 1
   }
-  resetMode() {
+  tableModeToggle() {
     this.srcMode = false
     this.listMode = false
+    this.tableMode = true
+  }
+
+  resetMode() {
+    /* our solution is hacky,
+       the multiplication of "modes" forced us
+       to create the exception that
+       IF we want to reset all modes while on tableMode,
+       it means for sure we want to publish the table to the
+       datastructure and further prepare the field for a new (possible and not obligatory)
+       table
+
+       reset mode is called by any function that is not linked to tables,
+       hence the (cf. supra) function "tableModeToggle()"
+       which allows for a resetMode+ this.tableMode = true
+       while avoiding the following condition :
+     */
+    if (this.tableMode) {
+      /*
+         If we do this.lastHeading.children.push(this.table)
+         and if after that we alter the value of this.table,
+         what will happen ?
+       */
+      if (Object.entries(this.headings).length > 0) {
+        this.lastHeading?.children.push(this.table.copyData())
+      } else {
+        this.roots.push(this.table.copyData())
+      }
+      // Flushing all table data
+      this.table = new Table()
+    }
+    this.srcMode = false
+    this.listMode = false
+    this.tableMode = false
   }
   HN(p: ParsingResult) {
     return new HornNode(this.count, p.level, p.type as string, p.text)
   }
+
   subscribeHeading(h: HornNode) {
     this.headings[h.level] = h
     this.lastHeading = h
@@ -75,6 +113,7 @@ class ParserState implements _ParserState {
     }
     this.lists[p.level] = h
     this.lastList = h
+    this.resetMode()
     this.listMode = true
     this.inc()
   }
@@ -88,7 +127,7 @@ class ParserState implements _ParserState {
       // obviously
       return this.appendParagraph(p)
     }
-    this.listMode = false
+    this.resetMode()
     this.srcMode = true
     const h = this.HN(p)
     // An src block is always the children of the last heading
@@ -105,11 +144,12 @@ class ParserState implements _ParserState {
     // you don't need another node
     if (this.srcMode) {
       this.inc()
-      return (this.srcMode = false)
+      return this.resetMode()
     }
     this.resetMode()
     return this.appendParagraph(p)
   }
+
   appendNSrc(p: ParsingResult) {
     if (this.srcMode && this.lastSrc) {
       this.inc()
@@ -131,9 +171,18 @@ class ParserState implements _ParserState {
     return this.lastHeading?.children.push(h)
   }
 
-  appendTableSep(p: ParsingResult ){
+  appendTableSep(p: ParsingResult) {
+    this.tableModeToggle()
+    this.table.publishRow("", "ruler")
   }
-  appendTable(p:ParsingResult){
+
+  appendTable(p: ParsingResult) {
+    if (this.tableMode) {
+      this.table.publishRow(p.text, "first-row")
+    } else {
+      this.tableModeToggle()
+      this.table.publishRow(p.text, "row")
+    }
   }
 
   mostRecentHeading(level: Int) {
