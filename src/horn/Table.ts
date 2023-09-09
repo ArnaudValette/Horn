@@ -25,12 +25,9 @@ class Table {
         .replace(/\s+/g, " ")
         .replace(/(^\s)|(\s$)/g, "")
         .split(" ")
-      if (rowType === 2) {
-        this.width = array.length
-      } 
       const res = new tableRowNode(state.count)
       state.inc()
-      for (let i = 0, j = this.width; i < j; i++) {
+      for (let i = 0, j = array.length; i < j; i++) {
           if (array[i]) {
           res.children.push(new HornNode(state.count, 0, "tableCell", array[i]))
           } else {

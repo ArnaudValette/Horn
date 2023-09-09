@@ -30,7 +30,8 @@ export class ParsableString extends String {
         ? d[0].length - 1
         : 0
     const text = this.#Text(d)
-    return { level, text, type }
+    // TODO
+    return type === "table" || type === "tableSep" ? { level, text:d[0], type } : {level, text, type}
   }
 
   // Meta
