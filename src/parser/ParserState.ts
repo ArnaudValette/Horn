@@ -58,9 +58,9 @@ class ParserState implements _ParserState {
          what will happen ?
        */
       if (Object.entries(this.headings).length > 0) {
-        this.lastHeading?.children.push(this.table.copyData())
+        this.lastHeading?.children.push(this.table.copyData(this))
       } else {
-        this.roots.push(this.table.copyData())
+        this.roots.push(this.table.copyData(this))
       }
       // Flushing all table data
       this.table = new Table()

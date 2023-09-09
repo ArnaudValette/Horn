@@ -24,3 +24,18 @@ export class HornNode {
     }
   }
 }
+
+// Prototyping:
+export class tableRootNode extends HornNode {
+  children: Array<tableRowNode> = []
+  constructor(id: number) {
+    super(id, 0, "table-root", "", null)
+  }
+}
+
+export class tableRowNode extends HornNode {
+  children: Array<HornNode> = []
+  constructor(id: number) {
+    super(id, 0, "table-row", "", null)
+  }
+}
