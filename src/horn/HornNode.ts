@@ -1,5 +1,5 @@
 export class HornNode {
-  children: HornNode[] = []
+  children: Array<HornNode | Array2D<string>> = []
   id: number
   parent: HornNode | null = null
   level: number
@@ -13,7 +13,7 @@ export class HornNode {
     level: number,
     nType: string,
     textContent: string,
-    parent?: HornNode | null
+    parent?: HornNode | null,
   ) {
     this.id = id
     this.level = level
