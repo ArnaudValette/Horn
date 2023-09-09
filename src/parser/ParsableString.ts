@@ -9,7 +9,7 @@ export class ParsableString extends String {
     eSrc: /^#\+end_src/,
     nSrc: /^#\+name:/,
     table: /^(\|.*)+\|$/,
-    tableSeparator: /^\|(-+\+)+-+\|$/, 
+    tableSep: /^\|(-+\+)+-+\|$/,
   }
   constructor(s: string) {
     super(s)
@@ -47,9 +47,9 @@ export class ParsableString extends String {
     this.parse("nSrc", this.eSrc.bind(this))
   eSrc = (): NextMethod | ParsingResult =>
     this.parse("eSrc", this.tSep.bind(this))
-  tSep = () : NextMethod | ParsingResult =>
-    this.parse("tableSeparator", this.Table.bind(this))
-  Table = ():NextMethod | ParsingResult =>
+  tSep = (): NextMethod | ParsingResult =>
+    this.parse("tableSep", this.Table.bind(this))
+  Table = (): NextMethod | ParsingResult =>
     this.parse("table", this.Paragraph.bind(this))
   Paragraph = (): ParsingResult => ({
     level: 0,
