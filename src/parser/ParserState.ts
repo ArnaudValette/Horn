@@ -92,6 +92,7 @@ class ParserState implements _ParserState {
     // An src block is always the children of the last heading
     // if it is not a root node
     this.lastSrc = h
+    this.inc()
     if (Object.keys(this.headings).length === 0) {
       return this.roots.push(h)
     }
@@ -101,6 +102,7 @@ class ParserState implements _ParserState {
   appendESrc(p: ParsingResult) {
     // you don't need another node
     if (this.srcMode) {
+      this.inc()
       return (this.srcMode = false)
     }
     this.resetMode()
@@ -108,6 +110,7 @@ class ParserState implements _ParserState {
   }
   appendNSrc(p: ParsingResult) {
     if (this.srcMode && this.lastSrc) {
+      this.inc()
       return this.lastSrc.tags.push(`name:${p.text}`)
     }
     this.resetMode()
@@ -119,6 +122,7 @@ class ParserState implements _ParserState {
       return this.lastSrc.children.push(h)
     }
     this.resetMode()
+    this.inc()
     if (Object.entries(this.headings).length === 0) {
       return this.roots.push(h)
     }
