@@ -173,15 +173,15 @@ class ParserState implements _ParserState {
 
   appendTableSep(p: ParsingResult) {
     this.tableModeToggle()
-    this.table.publishRow("", "ruler")
+    this.table.publishRow("", 0, this)
   }
 
   appendTable(p: ParsingResult) {
     if (this.tableMode) {
-      this.table.publishRow(p.text, "first-row")
+      this.table.publishRow(p.text, 2, this)
     } else {
       this.tableModeToggle()
-      this.table.publishRow(p.text, "row")
+      this.table.publishRow(p.text, 1, this)
     }
   }
 

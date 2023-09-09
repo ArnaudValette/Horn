@@ -19,6 +19,12 @@ type GenericNode = {
   textContent: string
 }
 
+enum rowTypeEnum {
+  isRuler = 0,
+  isRow,
+  isFirstRow
+}
+
 type GlitterNode = GenericNode & {
   href: string
   src: string
