@@ -15,5 +15,5 @@ fs.readFile("./data/example.org", (err, data) => {
   //console.log(x.state.lists)
   //console.log(x.state.roots[5])
   //@ts-ignore
-  console.log(x.state.lastHeading.children[3].children)
+  console.log(x.state.lastHeading.children[3].children[0].children)
 })

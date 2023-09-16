@@ -18,6 +18,10 @@ export class ParsableString extends String {
     return d.input.substring(d[0].length, this.toString().length)
   }
 
+  isTable(type: keyof Regs) {
+    return (type as string).includes("table")
+  }
+
   parse(type: keyof Regs, nextMethod: NextMethod): NextMethod | ParsingResult {
     const d: R = this.regs[type].exec(this.toString())
     if (!d) return nextMethod()
@@ -29,9 +33,8 @@ export class ParsableString extends String {
         : type === "heading"
         ? d[0].length - 1
         : 0
-    const text = this.#Text(d)
-    // TODO
-    return type === "table" || type === "tableSep" ? { level, text:d[0], type } : {level, text, type}
+    const text = this.isTable(type) ? d[0] : this.#Text(d)
+    return { level, text, type }
   }
 
   // Meta
