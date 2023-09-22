@@ -2,6 +2,7 @@ import { Regs, Rr, R, NextMethod, ParsingResult } from "./Parser"
 
 export class ParsableString extends String {
   regs: Regs = {
+    /* primary nodes */
     heading: /^\*+\s/,
     list: /^\s*-\s/,
     nList: /^\s*[A-Za-z0-9]+\.\s/,
@@ -10,6 +11,7 @@ export class ParsableString extends String {
     nSrc: /^#\+name:/,
     table: /^(\|.*)+\|$/,
     tableSep: /^\|(-+\+)+-+\|$/,
+    /* secondary nodes */
   }
   constructor(s: string) {
     super(s)
