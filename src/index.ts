@@ -12,9 +12,7 @@ fs.readFile("./data/example.org", (err, data) => {
     return console.log(err)
   }
   x.parseOrg(data)
-  console.log(x.state.roots)
-  console.log(x.state.lastSrc)
-  console.log(x.state.lists)
+  console.log(x.state.footNotes)
   //console.log(x.state)
   //@ts-ignore
   //console.log(x.state.lastHeading.children[3].children[0].children)

@@ -5,7 +5,7 @@ export class ParsableString extends String {
     /* primary nodes */
     heading: /^\*+\s/,
     list: /^\s*-\s/,
-    nList: /^\s*[A-Za-z0-9]+\.\s/,
+    nList: /^\s*([A-Za-z]|[0-9]+)\.\s/,
     sTemplate: /^#\+begin_/,
     sTemplateEnd: /^#\+end_/,
     //bSrc: /^#\+begin_src/,

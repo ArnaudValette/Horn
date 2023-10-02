@@ -82,7 +82,11 @@ class ParserState implements _ParserState {
     }
   }
   FN() {
-    return new FootNode(this.count, 0, this.footNoteMode || "")
+    return new FootNode(
+      this.count,
+      this.footNoteId || 0,
+      this.footNoteMode || ""
+    )
   }
   HN(p: ParsingResult) {
     return new HornNode(this.count, p.level, p.type as string, p.text)
@@ -126,6 +130,11 @@ class ParserState implements _ParserState {
     this.#trivialAppend(h, p)
   }
   appendEmpty(p: ParsingResult) {
+    if (this.footNoteMode) {
+      const f = this.FN()
+      this.footNotes.push(f)
+      return (this.footNoteMode = null)
+    }
     const h = this.HN(p)
     this.#trivialAppend(h, p)
   }
