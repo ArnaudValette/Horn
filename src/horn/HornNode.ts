@@ -13,7 +13,7 @@ export class HornNode {
     level: number,
     nType: string,
     textContent: string,
-    parent?: HornNode | null,
+    parent?: HornNode | null
   ) {
     this.id = id
     this.level = level
@@ -22,6 +22,24 @@ export class HornNode {
     if (parent) {
       this.parent = parent
     }
+  }
+}
+
+export class StructTemplateNode extends HornNode {
+  children: Array<HornNode> = []
+  StructureType: string = ""
+  Info: string = ""
+  constructor(
+    id: number,
+    level: number,
+    nType: string,
+    secondType: string,
+    textContent: string,
+    parent?: HornNode | null
+  ) {
+    super(id, level, nType, "", null)
+    this.StructureType = secondType
+    this.Info = textContent
   }
 }
 

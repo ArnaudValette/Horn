@@ -23,8 +23,10 @@ class Parser {
       heading: this.#heading,
       list: this.#list,
       nList: this.#nlist,
-      bSrc: this.#bsrc,
-      eSrc: this.#esrc,
+      sTemplate: this.#sTemplate,
+      sTemplateEnd: this.#sTemplateEnd,
+      //bSrc: this.#bsrc,
+      //eSrc: this.#esrc,
       nSrc: this.#nsrc,
       paragraph: this.#paragraph,
       tableSep: this.#tableSep,
@@ -69,15 +71,21 @@ class Parser {
     // I think we should treat em like normal list for now ?
     this.state.appendList(p)
   }
-  #bsrc(p: ParsingResult) {
-    this.state.appendBSrc(p)
+  #sTemplate(p: ParsingResult) {
+    this.state.appendTemplate(p)
+  }
+  #sTemplateEnd(p: ParsingResult) {
+    this.state.appendTemplateEnd(p)
   }
   #nsrc(p: ParsingResult) {
     this.state.appendNSrc(p)
   }
-  #esrc(p: ParsingResult) {
-    this.state.appendESrc(p)
-  }
+  // #esrc(p: ParsingResult) {
+  //   this.state.appendESrc(p)
+  // }
+  // #bsrc(p: ParsingResult) {
+  //   this.state.appendBSrc(p)
+  // }
   #tableSep(p: ParsingResult) {
     this.state.appendTableSep(p)
   }

@@ -6,8 +6,10 @@ export class ParsableString extends String {
     heading: /^\*+\s/,
     list: /^\s*-\s/,
     nList: /^\s*[A-Za-z0-9]+\.\s/,
-    bSrc: /^#\+begin_src/,
-    eSrc: /^#\+end_src/,
+    sTemplate: /^#\+begin_/,
+    sTemplateEnd: /^#\+end_/,
+    //bSrc: /^#\+begin_src/,
+    //eSrc: /^#\+end_src/,
     nSrc: /^#\+name:/,
     table: /^(\|.*)+\|$/,
     tableSep: /^\|(-+\+)+-+\|$/,
@@ -54,13 +56,13 @@ export class ParsableString extends String {
   List = (): NextMethod | ParsingResult =>
     this.parse("list", this.nList.bind(this))
   nList = (): NextMethod | ParsingResult =>
-    this.parse("nList", this.bSrc.bind(this))
-  bSrc = (): NextMethod | ParsingResult =>
-    this.parse("bSrc", this.nSrc.bind(this))
+    this.parse("nList", this.sTemplate.bind(this))
+  sTemplate = (): NextMethod | ParsingResult =>
+    this.parse("sTemplate", this.nSrc.bind(this))
   nSrc = (): NextMethod | ParsingResult =>
-    this.parse("nSrc", this.eSrc.bind(this))
-  eSrc = (): NextMethod | ParsingResult =>
-    this.parse("eSrc", this.tSep.bind(this))
+    this.parse("nSrc", this.sTemplateEnd.bind(this))
+  sTemplateEnd = (): NextMethod | ParsingResult =>
+    this.parse("sTemplateEnd", this.tSep.bind(this))
   tSep = (): NextMethod | ParsingResult =>
     this.parse("tableSep", this.Table.bind(this))
   Table = (): NextMethod | ParsingResult =>
@@ -70,4 +72,9 @@ export class ParsableString extends String {
     text: this.toString(),
     type: "paragraph",
   })
+  //OLD
+  //bSrc = (): NextMethod | ParsingResult =>
+  //this.parse("bSrc", this.nSrc.bind(this))
+  //eSrc = (): NextMethod | ParsingResult =>
+  //this.parse("eSrc", this.tSep.bind(this))
 }

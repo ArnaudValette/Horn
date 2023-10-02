@@ -22,7 +22,7 @@ type GenericNode = {
 enum rowTypeEnum {
   isRuler = 0,
   isRow,
-  isFirstRow
+  isFirstRow,
 }
 
 type GlitterNode = GenericNode & {
@@ -50,6 +50,6 @@ interface _ParserState {
   lastList: HornNode | null
   lastSrc: HornNode | null
   listMode: Boolean
-  srcMode: Boolean
+  srcMode: string | null
   count: Int
 }

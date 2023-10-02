@@ -1,5 +1,5 @@
 import Table from "../horn/Table"
-import { HornNode } from "../horn/HornNode"
+import { HornNode, StructTemplateNode } from "../horn/HornNode"
 import { ParsingResult } from "./Parser"
 
 class ParserState implements _ParserState {
@@ -12,7 +12,7 @@ class ParserState implements _ParserState {
   table: Table
   tableMode: Boolean
   listMode: Boolean
-  srcMode: Boolean
+  srcMode: string | null
   count: Int = 0
 
   constructor() {
@@ -25,50 +25,37 @@ class ParserState implements _ParserState {
     this.tableMode = false
     this.listMode = false
     this.table = new Table()
-    this.srcMode = false
+    this.srcMode = null
   }
 
   inc() {
     this.count += 1
   }
+
+  templateModeToggle(type: string) {
+    this.resetMode()
+    this.srcMode = type
+  }
   tableModeToggle() {
-    this.srcMode = false
+    this.srcMode = null
     this.listMode = false
     this.tableMode = true
   }
 
   resetMode() {
-    /* our solution is hacky,
-       the multiplication of "modes" forced us
-       to create the exception that
-       IF we want to reset all modes while on tableMode,
-       it means for sure we want to publish the table to the
-       datastructure and further prepare the field for a new (possible and not obligatory)
-       table
-
-       reset mode is called by any function that is not linked to tables,
-       hence the (cf. supra) function "tableModeToggle()"
-       which allows for a resetMode+ this.tableMode = true
-       while avoiding the following condition :
-     */
     if (this.tableMode) {
-      /*
-         If we do this.lastHeading.children.push(this.table)
-         and if after that we alter the value of this.table,
-         what will happen ?
-       */
       if (Object.entries(this.headings).length > 0) {
         this.lastHeading?.children.push(this.table.copyData(this))
       } else {
         this.roots.push(this.table.copyData(this))
       }
-      // Flushing all table data
       this.table = new Table()
     }
-    this.srcMode = false
+    this.srcMode = null
     this.listMode = false
     this.tableMode = false
   }
+
   #trivialAppend(h: HornNode, p: ParsingResult) {
     if (this.srcMode) {
       return this.appendParagraph(p)
@@ -83,6 +70,18 @@ class ParserState implements _ParserState {
   }
   HN(p: ParsingResult) {
     return new HornNode(this.count, p.level, p.type as string, p.text)
+  }
+  ST(p: ParsingResult) {
+    const text2arr = p.text.split(" ")
+    const secondType = text2arr[0]
+    const textContent = text2arr[1] || " "
+    return new StructTemplateNode(
+      this.count,
+      p.level,
+      p.type as string,
+      secondType,
+      textContent
+    )
   }
 
   appendOrgCode(p: ParsingResult) {
@@ -146,16 +145,15 @@ class ParserState implements _ParserState {
        a numbered list works exactly like a common list, I think...
      */
   }
-  appendBSrc(p: ParsingResult) {
+
+  appendTemplate(p: ParsingResult) {
     if (this.srcMode) {
       // obviously
       return this.appendParagraph(p)
     }
     this.resetMode()
-    this.srcMode = true
-    const h = this.HN(p)
-    // An src block is always the children of the last heading
-    // if it is not a root node
+    const h = this.ST(p)
+    this.srcMode = h.StructureType
     this.lastSrc = h
     this.inc()
     if (Object.keys(this.headings).length === 0) {
@@ -164,9 +162,9 @@ class ParserState implements _ParserState {
     return this.lastHeading?.children.push(h)
   }
 
-  appendESrc(p: ParsingResult) {
-    // you don't need another node
-    if (this.srcMode) {
+  appendTemplateEnd(p: ParsingResult) {
+    const h = this.ST(p)
+    if (this.srcMode && this.srcMode === h.StructureType) {
       this.inc()
       return this.resetMode()
     }
