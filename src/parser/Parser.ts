@@ -45,6 +45,10 @@ class Parser {
   #qualifyLine(s: string) {
     const p = new ParsableString(s)
     const parsed = p.start() as ParsingResult
+    // console.log(parsed.type)
+    // if (parsed.type === "sTemplate") {
+    //   console.log(parsed.text)
+    // }
     this.fDispatch[parsed.type].call(this, parsed)
   }
 
@@ -58,7 +62,7 @@ class Parser {
     this.state.appendEmpty(p)
   }
   #heading(p: ParsingResult) {
-    if (p.level === 1) {
+    if (p.level === 1 || Object.entries(this.state.headings).length === 0) {
       this.state.appendRoot(p)
     } else {
       this.state.appendHeading(p)
