@@ -11,6 +11,9 @@ export class ParsableString extends String {
     nSrc: /^#\+name:/,
     table: /^(\|.*)+\|$/,
     tableSep: /^\|(-+\+)+-+\|$/,
+    empty: /^\s*$/,
+    HR: /^\s*-{5,}\s*$/,
+    orgCode: /^:\s/,
     /* secondary nodes */
   }
   constructor(s: string) {
@@ -40,7 +43,12 @@ export class ParsableString extends String {
   }
 
   // Meta
-  start = (): NextMethod | ParsingResult => this.Heading()
+  start = (): NextMethod | ParsingResult => this.OrgCode()
+  OrgCode = (): NextMethod | ParsingResult =>
+    this.parse("orgCode", this.HR.bind(this))
+  HR = (): NextMethod | ParsingResult => this.parse("HR", this.Empty.bind(this))
+  Empty = (): NextMethod | ParsingResult =>
+    this.parse("empty", this.Heading.bind(this))
   Heading = (): NextMethod | ParsingResult =>
     this.parse("heading", this.List.bind(this))
   List = (): NextMethod | ParsingResult =>

@@ -29,6 +29,9 @@ class Parser {
       paragraph: this.#paragraph,
       tableSep: this.#tableSep,
       table: this.#table,
+      empty: this.#empty,
+      HR: this.#HR,
+      orgCode: this.#orgCode,
     }
   }
 
@@ -43,6 +46,15 @@ class Parser {
     this.fDispatch[parsed.type].call(this, parsed)
   }
 
+  #orgCode(p: ParsingResult) {
+    this.state.appendOrgCode(p)
+  }
+  #HR(p: ParsingResult) {
+    this.state.appendHR(p)
+  }
+  #empty(p: ParsingResult) {
+    this.state.appendEmpty(p)
+  }
   #heading(p: ParsingResult) {
     if (p.level === 1) {
       this.state.appendRoot(p)
@@ -66,10 +78,10 @@ class Parser {
   #esrc(p: ParsingResult) {
     this.state.appendESrc(p)
   }
-  #tableSep(p: ParsingResult){
+  #tableSep(p: ParsingResult) {
     this.state.appendTableSep(p)
   }
-  #table(p:ParsingResult){
+  #table(p: ParsingResult) {
     this.state.appendTable(p)
   }
   #paragraph(p: ParsingResult) {

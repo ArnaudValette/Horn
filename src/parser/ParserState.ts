@@ -69,10 +69,34 @@ class ParserState implements _ParserState {
     this.listMode = false
     this.tableMode = false
   }
+  #trivialAppend(h: HornNode, p: ParsingResult) {
+    if (this.srcMode) {
+      return this.appendParagraph(p)
+    }
+    this.inc()
+    if (Object.entries(this.headings).length !== 0) {
+      //@ts-ignore
+      this.lastHeading.children.push(h)
+    } else {
+      this.roots.push(h)
+    }
+  }
   HN(p: ParsingResult) {
     return new HornNode(this.count, p.level, p.type as string, p.text)
   }
 
+  appendOrgCode(p: ParsingResult) {
+    const h = this.HN(p)
+    this.#trivialAppend(h, p)
+  }
+  appendHR(p: ParsingResult) {
+    const h = this.HN(p)
+    this.#trivialAppend(h, p)
+  }
+  appendEmpty(p: ParsingResult) {
+    const h = this.HN(p)
+    this.#trivialAppend(h, p)
+  }
   subscribeHeading(h: HornNode) {
     this.headings[h.level] = h
     this.lastHeading = h
