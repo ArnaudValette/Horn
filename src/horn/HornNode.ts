@@ -25,6 +25,19 @@ export class HornNode {
   }
 }
 
+export class FootNode extends HornNode {
+  //children: Array<HornNode> = []
+  noteId: number = 0
+  constructor(
+    id: number,
+    level: number,
+    textContent: string,
+    parent?: HornNode | null
+  ) {
+    super(id, 0, "footNote", textContent, null)
+    this.noteId = level
+  }
+}
 export class StructTemplateNode extends HornNode {
   children: Array<HornNode> = []
   StructureType: string = ""

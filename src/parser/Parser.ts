@@ -34,12 +34,14 @@ class Parser {
       empty: this.#empty,
       HR: this.#HR,
       orgCode: this.#orgCode,
+      footNote: this.#footNote,
     }
   }
 
   parseOrg(buff: Buffer) {
     const lines = buff.toString().split("\n")
     lines.forEach((line: string) => this.#qualifyLine(line))
+    this.state.transferFootNotes()
   }
 
   #qualifyLine(s: string) {
@@ -52,6 +54,9 @@ class Parser {
     this.fDispatch[parsed.type].call(this, parsed)
   }
 
+  #footNote(p: ParsingResult) {
+    this.state.appendFootNote(p)
+  }
   #orgCode(p: ParsingResult) {
     this.state.appendOrgCode(p)
   }

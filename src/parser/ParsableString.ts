@@ -16,6 +16,7 @@ export class ParsableString extends String {
     empty: /^\s*$/,
     HR: /^\s*-{5,}\s*$/,
     orgCode: /^:\s/,
+    footNote: /^\[fn:\d+\]\s/,
     /* secondary nodes */
   }
   constructor(s: string) {
@@ -23,6 +24,10 @@ export class ParsableString extends String {
   }
   #Text(d: Rr) {
     return d.input.substring(d[0].length, this.toString().length)
+  }
+
+  #FindNoteId(d: Rr) {
+    return parseInt(d.input.substring(4, this.toString().indexOf("]")))
   }
 
   isTable(type: keyof Regs) {
@@ -33,7 +38,9 @@ export class ParsableString extends String {
     const d: R = this.regs[type].exec(this.toString())
     if (!d) return nextMethod()
     const level =
-      type === "list"
+      type === "footNote"
+        ? this.#FindNoteId(d)
+        : type === "list"
         ? d[0].length / 2
         : type === "nList"
         ? Math.floor((d[0].length - 1) / 2)
@@ -45,7 +52,9 @@ export class ParsableString extends String {
   }
 
   // Meta
-  start = (): NextMethod | ParsingResult => this.OrgCode()
+  start = (): NextMethod | ParsingResult => this.FootNote()
+  FootNote = (): NextMethod | ParsingResult =>
+    this.parse("footNote", this.OrgCode.bind(this))
   OrgCode = (): NextMethod | ParsingResult =>
     this.parse("orgCode", this.HR.bind(this))
   HR = (): NextMethod | ParsingResult => this.parse("HR", this.Empty.bind(this))

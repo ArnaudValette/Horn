@@ -1,5 +1,5 @@
 import Table from "../horn/Table"
-import { HornNode, StructTemplateNode } from "../horn/HornNode"
+import { FootNode, HornNode, StructTemplateNode } from "../horn/HornNode"
 import { ParsingResult } from "./Parser"
 
 class ParserState implements _ParserState {
@@ -14,6 +14,9 @@ class ParserState implements _ParserState {
   listMode: Boolean
   srcMode: string | null
   count: Int = 0
+  footNoteMode: string | null = null
+  footNotes: Array<HornNode> = []
+  footNoteId: number | null = null
 
   constructor() {
     this.roots = []
@@ -28,6 +31,10 @@ class ParserState implements _ParserState {
     this.srcMode = null
   }
 
+  transferFootNotes() {
+    this.roots.push(...this.footNotes)
+  }
+
   inc() {
     this.count += 1
   }
@@ -38,11 +45,16 @@ class ParserState implements _ParserState {
   }
   tableModeToggle() {
     this.srcMode = null
+    this.footNoteMode = null
     this.listMode = false
     this.tableMode = true
   }
 
   resetMode() {
+    if (this.footNoteMode) {
+      const f = this.FN()
+      this.footNotes.push(f)
+    }
     if (this.tableMode) {
       if (Object.entries(this.headings).length > 0) {
         this.lastHeading?.children.push(this.table.copyData(this))
@@ -51,6 +63,7 @@ class ParserState implements _ParserState {
       }
       this.table = new Table()
     }
+    this.footNoteMode = null
     this.srcMode = null
     this.listMode = false
     this.tableMode = false
@@ -68,6 +81,9 @@ class ParserState implements _ParserState {
       this.roots.push(h)
     }
   }
+  FN() {
+    return new FootNode(this.count, 0, this.footNoteMode || "")
+  }
   HN(p: ParsingResult) {
     return new HornNode(this.count, p.level, p.type as string, p.text)
   }
@@ -84,6 +100,23 @@ class ParserState implements _ParserState {
     )
   }
 
+  FNModeToggle(str: string, id: number) {
+    this.resetMode()
+    this.footNoteMode = str
+    this.footNoteId = id
+  }
+  FNAppendText(str: string) {
+    if (this.footNoteMode) {
+      this.footNoteMode = this.footNoteMode.concat(str)
+    }
+  }
+  //It's not really appending, but rather entering a special mode of operation
+  appendFootNote(p: ParsingResult) {
+    if (this.srcMode) {
+      return this.appendParagraph(p)
+    }
+    this.FNModeToggle(p.text, p.level)
+  }
   appendOrgCode(p: ParsingResult) {
     const h = this.HN(p)
     this.#trivialAppend(h, p)
@@ -180,10 +213,14 @@ class ParserState implements _ParserState {
     this.resetMode()
     return this.appendParagraph(p)
   }
+
   appendParagraph(p: ParsingResult) {
     const h = this.HN(p)
     if (this.srcMode && this.lastSrc) {
       return this.lastSrc.children.push(h)
+    }
+    if (this.footNoteMode) {
+      return this.FNAppendText(p.text)
     }
     this.resetMode()
     this.inc()
