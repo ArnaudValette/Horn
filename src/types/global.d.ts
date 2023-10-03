@@ -46,9 +46,6 @@ type Roots = Array<HornNode>
 interface _ParserState {
   headings: Object
   lists: Object
-  lastHeading: HornNode | null
-  lastList: HornNode | null
-  lastSrc: HornNode | null
   listMode: Boolean
   srcMode: string | null
   count: Int
