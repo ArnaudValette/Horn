@@ -1,5 +1,5 @@
 const text =
-  "Ok let's *go / there* and +see /what is possible to * make+ ple/ase"
+  "Ok let's *go / there* and +see /what is possible to * make+ ple/ase / okok * yes * yed * okdfokjsdofkj sodkjfsd s *ok* xxxxx"
 
 type FlagsType = { [key: string]: number }
 
@@ -17,9 +17,11 @@ type token = {
   wholeT: number
   char?: string
 }
-type found = token & { end: number; text: string }
+type found = token & { end: number }
+type TextFormat = { type: number; start: number; end: number }
 
 let type = 0b000000
+let result: Array<TextFormat> = []
 let found: Array<found> = []
 let end: Array<token> = []
 let proc: { [key: number]: found | token } = {}
@@ -46,14 +48,23 @@ function noOverlap(f: Array<found>) {
     if (indexes[i + 1]) {
       const n1 = proc[parseInt(indexes[i])]
       const n2 = proc[parseInt(indexes[i + 1])]
-      const newNode = {
+      const newNode: TextFormat = {
         type: n1.wholeT,
         start: n1.position,
         end: n2.position,
-        text: text.substring(n1.position + 1, n2.position),
       }
-      console.log(newNode)
+      result.push(newNode)
     }
+  }
+  if (result[0].start !== 0) {
+    result = [{ type: 0, start: 0, end: result[0].start }, ...result]
+  }
+  if (result[result.length - 1].end !== text.length) {
+    result.push({
+      type: 0,
+      start: result[result.length - 1].end,
+      end: text.length - 1,
+    })
   }
 }
 
@@ -67,7 +78,6 @@ function matched(position: number, t: number) {
   found.push({
     ...tokens[i],
     end: position,
-    text: text.substring(tokens[i].position + 1, position),
   })
   tokens.splice(i, 1)
   return type ^ t
