@@ -1,3 +1,37 @@
+/*
+   this file is  the result of a reflexion about how you can
+   avoid org syntax to break your parser:
+   most of the parsers built for org-mode in the js ecosystem
+   usually cannot parse complex expressions such as
+   " Thi*s is / a * complex +  / expression that / may = be useless in itself ~ ="
+   This should be parsed as the following :
+
+   " Thi" : no formatting,
+   "s is " : bold,
+   " a " : bold AND italic,
+   " complex + " : italic (note that + is a true character here, because it doesn't have any matching pair,
+   " expression that / may " : no formatting,
+   " be useless in itself ~ " : inline-code formatting
+
+   The idea here is to behave exactly as intended, even if the expression reaches an absurd amount of complexity.
+
+   At the same time, I used a bitfield as a way to ensure format-type composition consistency
+   (bold, italic) <=> (italic, bold) === 48 === 0b110000
+
+   The ideal would be to implement the parser in such a way that it performs a simple pass.
+   I partially succeeded there, as it needs, after having parsed the text, to perform an operation to compute
+   overlapping nodes.
+
+   Now, complexity grows a lot when adding the other types of inline nodes org-mode syntax is capable of,
+   that's why a choice has to be made between
+
+   1. Separating concerns : dealing with Files, Links, Images, Footnotes, Timestamps and etc in a separate function
+   2. Merging concerns and accepting to sacrifice the reached accuracy in parsing org mode formatting syntax
+
+   Due to the non critical nature of the aim of this project I think we can conserve this implementation
+   at least temporarily and confront it with the "merging of concerns" solution in a benchmark later
+
+*/
 const text =
   "Ok let's *go / there* and +see /what is possible to * make+ ple/ase / okok * yes * yed * okdfokjsdofkj sodkjfsd s *ok* xxxxx"
 
