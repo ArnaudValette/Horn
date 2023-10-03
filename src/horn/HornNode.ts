@@ -1,5 +1,3 @@
-import { X509Certificate } from "crypto"
-
 export class HornNode {
   children: Array<HornNode | Array2D<string>> = []
   id: number
@@ -65,6 +63,10 @@ export class HornNode {
   replaceCheckboxes() {}
   replaceTODO() {}
 
+  #matches(t1, t2) {
+    return true
+  }
+
   replaceTextFormat() {
     let flags = {
       "*": 0b100000,
@@ -74,13 +76,26 @@ export class HornNode {
       "~": 0b000010,
       "=": 0b000001,
     }
-    let state = { type: 0b000000, matching: 0, content: "", prev: 0 }
-    for (let i = 0, j = this.textContent.length; i < j; i++) {
-      // process text character per character
-      const char = this.textContent[i]
-      let currentType = flags[char as keyof typeof flags] || 0
-      console.log(currentType)
-    }
+  }
+}
+
+class PossibleToken {
+  textContent: string
+  type: number
+  submitted: boolean = false
+  constructor(type: number, firstCharacter?: string) {
+    this.textContent = firstCharacter || ""
+    this.type = type
+  }
+  append(char: string) {
+    this.textContent = this.textContent.concat(char)
+  }
+  revoke() {
+    return this.textContent
+  }
+  publish() {
+    this.submitted = true
+    return this.textContent
   }
 }
 
@@ -91,8 +106,8 @@ export class HornNode {
 export class GlitterNode {
   text: string = ""
   position: number = 0
-  gType: string = "unknow"
-  constructor(text: string, position: number, type: string) {
+  gType: number
+  constructor(text: string, position: number, type: number) {
     this.text = text
     this.position = position
     this.gType = type
