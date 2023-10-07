@@ -12,8 +12,8 @@ type TreeChars = Array<TreeChar>
 
 const orgCommandMap: CommandMapArray = [
   ["digit", (char: string) => /[0-9]/.test(char), true],
-  ["Capital", (char: string) => /[A-Z]/.test(char), true],
-  ["low", (char: string) => /[a-z]/.test(char), true],
+  ["Capital", (char: string) => /[A-Z]/.test(char), false],
+  ["low", (char: string) => /[a-z]/.test(char), false],
   ["any", (char: string) => /[^\s\[\]]/.test(char), true],
   ["ANY", (char: string) => /[^\[\]]/.test(char), true],
 ]
@@ -40,6 +40,7 @@ const orgForest: Forest = {
 }
 
 const orgWakeUpChar = "["
+const orgSleepToken = "over"
 
 class TreeBasedParser {
   forest: Forest
@@ -49,11 +50,13 @@ class TreeBasedParser {
   matched: Boolean
   toggle: Boolean
   toggleChar: string
+  disableChar: string
 
-  constructor(validTrees: Forest, wakeUpChar: string) {
+  constructor(parserValidTrees: Forest, wakeUpChar: string, sleepChar: string) {
     this.toggleChar = wakeUpChar
-    this.forest = validTrees
-    this.next = Object.keys(validTrees)
+    this.disableChar = sleepChar
+    this.forest = parserValidTrees
+    this.next = Object.keys(parserValidTrees)
     this.path = []
     this.mem = ""
     this.toggle = false
@@ -61,13 +64,13 @@ class TreeBasedParser {
   }
 
   parseChar(
-    cond: boolean,
+    cond: (char: string, name?: string) => boolean,
     children: tKeys,
     char: string,
     target: string,
     isRedundant?: boolean
   ) {
-    if (cond) {
+    if (cond(char, target)) {
       this.next = [...children]
       this.push(target, isRedundant)
       this.matched = true
@@ -77,11 +80,11 @@ class TreeBasedParser {
     return false
   }
 
-  forestDive(i: number): Forest {
-    const a = this.path
-    const o = this.forest
+  forestDive(o: Forest, a: tKeys, i: number): Forest | Function {
     //@ts-ignore
-    return a[i + 1] && o[a[i]][a[i + 1]] ? this.forestDive(i + 1) : o[a[i]]
+    return a[i + 1] && o[a[i]][a[i + 1]]
+      ? this.forestDive(o[a[i]] as Forest, a, i + 1)
+      : o[a[i]]
   }
 
   push(target: string, isRedundant?: boolean) {
@@ -90,27 +93,93 @@ class TreeBasedParser {
       if (!last || last !== target) {
         this.path.push(target)
       }
+      this.next.push(target)
     } else {
       this.path.push(target)
     }
+  }
+  handleOver(char: string) {
+    if (this.toggle && this.path.length > 0) {
+      const depths = this.forestDive(this.forest, this.path, 0) as Forest
+      if (depths[char] === this.disableChar) {
+        console.log(this.mem)
+        this.resetState()
+      }
+    }
+  }
+
+  getLastNodes(): [Forest, Forest] {
+    const [l, o, a] = [this.path.length, this.forest, this.path]
+    const curr = l > 0 ? this.forestDive(o, a, 0) : o
+    const prev = l > 1 ? this.forestDive(o, a.slice(0, a.length - 1), 0) : o
+    return [curr as Forest, prev as Forest]
+  }
+
+  resetState() {
+    this.path = []
+    this.next = Object.keys(this.forest)
+    this.toggle = false
+    this.mem = ""
+  }
+
+  shouldToggle(char: string) {
+    return char === this.toggleChar && !this.toggle
+  }
+  shouldNotToggle(char: string) {
+    const should = this.shouldToggle(char)
+    if (should) {
+      this.toggle = true
+      return false
+    }
+    return true
   }
 }
 
 class OrgBracketElementsParser extends TreeBasedParser {
   commandMap: CommandMap = {}
   constructor() {
-    super(orgForest, orgWakeUpChar)
+    super(orgForest, orgWakeUpChar, orgSleepToken)
     orgCommandMap.forEach((c: parserCommand) =>
       this.registerCommandMap(c[0], c[1], c[2])
     )
     orgTreeChars.forEach((c: TreeChar) => this.registerCharCommands(c))
   }
+
   registerCharCommands(name: TreeChar) {
     this.commandMap[name] = (char: string, children: tKeys) =>
-      this.parseChar(char === name, children, char, char, false)
+      this.parseChar((x, y) => x === y, children, char, name, false)
   }
+
   registerCommandMap(name: string, cond: Function, isRedundant: boolean) {
     this.commandMap[name] = (char: string, children: tKeys) =>
-      this.parseChar(cond(char), children, char, name, isRedundant)
+      this.parseChar((x, y) => cond(x), children, char, name, isRedundant)
+  }
+
+  parse(line: string) {
+    for (let i = 0, j = line.length; i < j; i++) {
+      const char = line[i]
+      if (this.shouldNotToggle(char)) {
+        this.handleOver(char)
+        this.matched = false
+        if (this.toggle) {
+          const [curr, prev] = this.getLastNodes()
+          for (let x = 0, y = this.next.length; x < y && !this.matched; x++) {
+            const k = this.next[x]
+            const b = Object.keys(curr[k] || prev[k])
+            const fn = this.commandMap[k]
+            this.matched = fn(char, b)
+          }
+          if (!this.matched) {
+            this.resetState()
+          }
+        }
+      }
+    }
   }
 }
+
+const txt =
+  "there are dates [2023-10-03 Tue], false [ brackets and [ also ] sometimes [[file:/file][nameFile]] some [[~/img.png]] [fn:3] ]] ]] [ ] (checkbox) and : [fnde] [232545857685-222222-444565 Mon] [0%] [100%] [0/] [0/2]"
+
+const orgparser = new OrgBracketElementsParser()
+orgparser.parse(txt)
