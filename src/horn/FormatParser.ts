@@ -1,39 +1,3 @@
-/*
-   Usage :
-
-    const line: string =
-   "/Ok/ let's *go / there* and +see /what is possible to *
-   make+ wi/th~ this / . * So * far, * we can see *that* the+ normal* distribution[...]*"
-
-    let flagField: FlagsType = {
-    "*": 0b100000,
-    "/": 0b010000,
-    _: 0b001000,
-    "+": 0b000100,
-    "~": 0b000010,
-    "=": 0b000001,
-    }
-
-
-   const parser = new FormatParser(flagField)
-   const parsedString = parser.parse(line)
-
-   Result is an array of MarkerWithTextContentAndEnd
-   example:
-   {
-   type: 0b100000, <=== the raw type of the current node (here bold, "*")
-   adjective: 0b111000, <=== the real type of the current node (compound type, bold+italic+underlined)
-   position: 5 (a number) <=== the start of the node in the line
-   end: 8 (a number) <=== the end of the node in the line
-   text: "some bold italic underlined text" <=== the substring
-   }
-
-   Note:
-   position includes the encountered marker (*, / , _... in our case)
-   end excludes it
-   text doesn't contain the marker symbols when they are indeed markers
-
-*/
 type Flag = number
 type FlagsType = { [key: string]: Flag }
 type Marker = {
@@ -174,3 +138,40 @@ class FormatParser {
 // const parser = new FormatParser(flagField)
 // const parsedString = parser.parse(line)
 // console.log(parsedString)
+
+/*
+   Usage :
+
+    const line: string =
+   "/Ok/ let's *go / there* and +see /what is possible to *
+   make+ wi/th~ this / . * So * far, * we can see *that* the+ normal* distribution[...]*"
+
+    let flagField: FlagsType = {
+    "*": 0b100000,
+    "/": 0b010000,
+    _: 0b001000,
+    "+": 0b000100,
+    "~": 0b000010,
+    "=": 0b000001,
+    }
+
+
+   const parser = new FormatParser(flagField)
+   const parsedString = parser.parse(line)
+
+   Result is an array of MarkerWithTextContentAndEnd
+   example:
+   {
+   type: 0b100000, <=== the raw type of the current node (here bold, "*")
+   adjective: 0b111000, <=== the real type of the current node (compound type, bold+italic+underlined)
+   position: 5 (a number) <=== the start of the node in the line
+   end: 8 (a number) <=== the end of the node in the line
+   text: "some bold italic underlined text" <=== the substring
+   }
+
+   Note:
+   position includes the encountered marker (*, / , _... in our case)
+   end excludes it
+   text doesn't contain the marker symbols when they are indeed markers
+
+*/
