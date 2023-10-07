@@ -6,11 +6,13 @@ export class TreeParserProto {
   matched: Boolean
   toggle: Boolean
   toggleChar: string
-  disableChar: string
+  start: number = 0
+  end: number = 0
+  nodeMap: Array<TreeParserNode> = []
+  textDelimitations: Array<Array<number>> = []
 
-  constructor(parserValidTrees: Forest, wakeUpChar: string, sleepChar: string) {
+  constructor(parserValidTrees: Forest, wakeUpChar: string) {
     this.toggleChar = wakeUpChar
-    this.disableChar = sleepChar
     this.forest = parserValidTrees
     this.next = Object.keys(parserValidTrees)
     this.path = []
@@ -54,12 +56,42 @@ export class TreeParserProto {
       this.path.push(target)
     }
   }
-  handleOver(char: string) {
+  handleOver(char: string, i: number) {
     if (this.toggle && this.path.length > 0) {
       const depths = this.forestDive(this.forest, this.path, 0) as Forest
-      if (depths[char] === this.disableChar) {
-        console.log(this.mem)
+      if (depths[char] && (depths[char] as orgBracketNode).done) {
+        //console.log(this.mem)
+        this.handleNode(i, (depths[char] as orgBracketNode).type)
         this.resetState()
+      }
+    }
+  }
+
+  handleNode(i: number, type: orgBracketType) {
+    this.end = i
+    const node = {
+      start: this.start,
+      end: this.end + 1,
+      textContent: "[" + this.mem + "]",
+      type,
+    }
+    this.nodeMap.push(node)
+  }
+
+  delimitText() {
+    const nodeLimitations = this.nodeMap.map((e: TreeParserNode) => [
+      e.start,
+      e.end,
+    ])
+    if (nodeLimitations[0][0] !== 0) {
+      this.textDelimitations.push([0, nodeLimitations[0][0]])
+    }
+    for (let i = 0, j = nodeLimitations.length - 1; i < j; i++) {
+      if (nodeLimitations[i][1] < nodeLimitations[i + 1][0] - 1) {
+        this.textDelimitations.push([
+          nodeLimitations[i][1],
+          nodeLimitations[i + 1][0],
+        ])
       }
     }
   }
@@ -81,9 +113,10 @@ export class TreeParserProto {
   shouldToggle(char: string) {
     return char === this.toggleChar && !this.toggle
   }
-  shouldNotToggle(char: string) {
+  shouldNotToggle(char: string, i: number) {
     const should = this.shouldToggle(char)
     if (should) {
+      this.start = i
       this.toggle = true
       return false
     }

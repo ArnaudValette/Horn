@@ -1,53 +1,50 @@
+/*
+   A tree-based parser for org mode that allows for character by character parsing.
+   This is used to collect :
+
+  - [X] checkboxes in lists
+  - [-] timestamps 
+    - [ ] active : <2023-10-03 Tue>
+    - [X] inactive : [2023-10-03 Tue] 
+  - [X] statistic cookie [100%] [2/2]
+    - [X] On lists
+    - [X] on headings with TODO
+  - [X] links 
+    - [X] [[file:~/.emacs.d/init.el][init.el]]
+    - [X] [[http://www.google.fr][google]]
+  - [X] images
+    - [X] local [[./img/a.jpg]]
+    - [X] remote [[https://www.example.com]]
+  - [X] footnotes : [fn:1] 
+
+   It is implemented according to these considerations:
+   Everytime a character "[" is recognized for the first time, we enter parsing mode.
+   We parse according to a tree of possibilities:
+   e.g. if after the first [, our next character is <space>, then we now that the only possibility
+   to form a correct org mode element is to conclude with ] (=> [ ] , a checkbox).
+   e.g. if after the first [ the next character is a digit, we now that the next character should be:
+   another digit, or %, or /, or - (=> [12 , [1% , [1/ , [1- , a date, a stat cookie, a stat cookie, a date, respectively)
+
+   any character we encounter that doesn't allow us to pursue our route in the tree reset the state of the parser.
+   i.e. after [2023- you cannot have a character "b", so we consider [2023-b verbatim, as a text element of the document.
+
+   A test should be made to understand if this is less preferable than a regex based parser, performance wise.
+
+ */
+import {
+  orgCommandMap,
+  orgForest,
+  orgSleepToken,
+  orgTreeChars,
+  orgWakeUpChar,
+} from "./OrgParserData"
 import { TreeParserProto } from "./TreeParserProto"
 
-interface Forest {
-  [key: string]: Forest | string
-}
-
-type tKeys = Array<keyof Forest>
-type CommandMap = { [key: string]: Function }
-type parserCheck = (char: string) => boolean
-type parserCommand = [string, parserCheck, boolean]
-type CommandMapArray = Array<parserCommand>
-type TreeChar = string
-type TreeChars = Array<TreeChar>
-
-const orgCommandMap: CommandMapArray = [
-  ["digit", (char: string) => /[0-9]/.test(char), true],
-  ["Capital", (char: string) => /[A-Z]/.test(char), false],
-  ["low", (char: string) => /[a-z]/.test(char), false],
-  ["any", (char: string) => /[^\s\[\]]/.test(char), true],
-  ["ANY", (char: string) => /[^\[\]]/.test(char), true],
-]
-
-const orgTreeChars: TreeChars = ["f", "n", "%", "/", "-", "]", "[", ":", " "]
-
-const orgForest: Forest = {
-  digit: {
-    "%": { "]": "over" },
-    "/": { digit: { "]": "over" } },
-    "-": {
-      digit: {
-        "-": {
-          digit: { " ": { Capital: { low: { low: { "]": "over" } } } } },
-        },
-      },
-    },
-  },
-  " ": { "]": "over" },
-  "[": {
-    any: { "]": { "]": "over", "[": { ANY: { "]": { "]": "over" } } } } },
-  },
-  f: { n: { ":": { any: { "]": "over" } } } },
-}
-
-const orgWakeUpChar = "["
-const orgSleepToken = "over"
-
+const a = performance.now()
 class OrgBracketElementsParser extends TreeParserProto {
   commandMap: CommandMap = {}
   constructor() {
-    super(orgForest, orgWakeUpChar, orgSleepToken)
+    super(orgForest, orgWakeUpChar)
     orgCommandMap.forEach((c: parserCommand) =>
       this.registerCommandMap(c[0], c[1], c[2])
     )
@@ -67,8 +64,8 @@ class OrgBracketElementsParser extends TreeParserProto {
   parse(line: string) {
     for (let i = 0, j = line.length; i < j; i++) {
       const char = line[i]
-      if (this.shouldNotToggle(char)) {
-        this.handleOver(char)
+      if (this.shouldNotToggle(char, i)) {
+        this.handleOver(char, i)
         this.matched = false
         if (this.toggle) {
           const [curr, prev] = this.getLastNodes()
@@ -84,6 +81,8 @@ class OrgBracketElementsParser extends TreeParserProto {
         }
       }
     }
+    console.log(line.substring(this.nodeMap[0].start, this.nodeMap[0].end))
+    this.delimitText()
   }
 }
 
@@ -92,3 +91,10 @@ const txt =
 
 const orgparser = new OrgBracketElementsParser()
 orgparser.parse(txt)
+const b = performance.now()
+console.log(orgparser.nodeMap)
+//You can call another parser e.g. FormatParser on the textDelimitations
+orgparser.textDelimitations.forEach((lim) =>
+  console.log(txt.substring(lim[0], lim[1]))
+)
+console.log(`${b - a} milliseconds`)

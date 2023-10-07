@@ -50,3 +50,34 @@ interface _ParserState {
   srcMode: string | null
   count: Int
 }
+
+type orgBracketType =
+  | "cookiePercent"
+  | "cookieRatio"
+  | "date"
+  | "checkboxEmpty"
+  | "image"
+  | "link"
+  | "footnote"
+interface orgBracketNode {
+  done: boolean
+  type: orgBracketType
+}
+interface Forest {
+  [key: string]: Forest | string | orgBracketNode
+}
+
+type tKeys = Array<keyof Forest>
+type CommandMap = { [key: string]: Function }
+type parserCheck = (char: string) => boolean
+type parserCommand = [string, parserCheck, boolean]
+type CommandMapArray = Array<parserCommand>
+type TreeChar = string
+type TreeChars = Array<TreeChar>
+
+type TreeParserNode = {
+  start: number
+  end: number
+  textContent: string
+  type: orgBracketType
+}
