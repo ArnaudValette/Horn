@@ -1,3 +1,5 @@
+import { OrgBracketElementsParser } from "./OrgBracketParser"
+
 export class HornNode {
   children: Array<HornNode | Array2D<string>> = []
   id: number
@@ -23,59 +25,12 @@ export class HornNode {
       this.parent = parent
     }
   }
-  /* should remove from the textContent the found token, and store in the glitterNodes array the
-    associated object
-    the problem in a regex based way of processing the textContent
-    is that we will perform a lot of passes.
-    a way to fix this would be to write a parser
-    based on the interpretation of symbols
-    there are different kinds of tokens :
-    [] based ones, format tokens, and TODO/DONE
-    This has to be optimized in the near future
-    I think a good solution would be to treat at least simple
-    problems such as textFormatting options
-    as a pair matching operation
-    */
   processGlitterNodes() {
-    this.replaceFiles()
-    this.replaceLinks()
-    this.replaceImages()
-    this.replaceTimeStamps()
-    this.replaceCookie()
-    this.replaceFN()
-    this.replaceCheckboxes()
-    this.replaceTODO()
-    this.replaceTextFormat()
-    // this.replaceBold()
-    // this.replaceItalic()
-    // this.replaceUnderline()
-    // this.replaceStrike()
-    // this.replaceCode()
-    // this.replaceVerbatim()
+    //this.replaceTODO()
+    //this.parseBracketNodes()
+    //this.replaceTextFormat()
   }
-  // TODO:
-  replaceFiles() {}
-  replaceLinks() {}
-  replaceImages() {}
-  replaceTimeStamps() {}
-  replaceCookie() {}
-  replaceFN() {}
-  replaceCheckboxes() {}
-  replaceTODO() {}
-
-  #matches(t1, t2) {
-    return true
-  }
-
-  replaceTextFormat() {
-    let flags = {
-      "*": 0b100000,
-      "/": 0b010000,
-      _: 0b001000,
-      "+": 0b000100,
-      "~": 0b000010,
-      "=": 0b000001,
-    }
+  replaceTODO() {
   }
 }
 

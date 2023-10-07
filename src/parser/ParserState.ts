@@ -2,6 +2,8 @@ import Table from "../horn/Table"
 import { FootNode, HornNode, StructTemplateNode } from "../horn/HornNode"
 import { ParsingResult } from "./Parser"
 
+// TODO: it should be more logical, more focused, so that we can
+// perform the operation of passing the glitterNodes to ANY node easily
 class ParserState implements _ParserState {
   roots: Array<HornNode | Array2D<string>>
   headings: Obj<HornNode>

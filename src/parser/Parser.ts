@@ -1,6 +1,7 @@
 import ParserState from "./ParserState"
 
 import { ParsableString } from "./ParsableString"
+import { OrgBracketElementsParser } from "src/horn/OrgBracketParser"
 
 export type R = RegExpExecArray | null
 export type Rr = RegExpExecArray
@@ -17,7 +18,15 @@ type FunctionDispatcher = Obj<(p: ParsingResult) => void>
 class Parser {
   state: ParserState
   fDispatch: FunctionDispatcher
-  constructor() {
+  bracketParser:OrgBracketElementsParser
+  bracketNodesMap:Array<TreeParserNode>=[]
+  formatNodesMap:Array<Marker|MarkerWithTextContent>=[]
+  textDelimitations:Array<Array<number>>=[]
+  formatParser:FormatParser
+  constructor(
+    bracketParser:OrgBracketElementsParser,
+    formatParser:FormatParser,
+  ) {
     this.state = new ParserState()
     this.fDispatch = {
       heading: this.#heading,
@@ -36,6 +45,8 @@ class Parser {
       orgCode: this.#orgCode,
       footNote: this.#footNote,
     }
+    this.bracketParser = bracketParser
+    this.formatParser = formatParser
   }
 
   parseOrg(buff: Buffer) {
@@ -47,10 +58,17 @@ class Parser {
   #qualifyLine(s: string) {
     const p = new ParsableString(s)
     const parsed = p.start() as ParsingResult
-    // console.log(parsed.type)
-    // if (parsed.type === "sTemplate") {
-    //   console.log(parsed.text)
-    // }
+    this.bracketParser.parse(parsed.text)
+    this.bracketNodesMap = [...this.bracketParser.nodeMap]
+    this.textDelimitations = [...this.bracketParser.textDelimitations]
+    this.textDelimitations.forEach((lim)=>{
+      const markersMap = this.formatParser.parse(parsed.text.substring(lim[0],lim[1]))
+      if(markersMap.length > 0){
+        this.formatNodesMap.push(...markersMap)
+      }
+    })
+    // TODO: treat bracketNodes and formatNodes as GlitterNodes, and transfer them
+    // to the hornNode
     this.fDispatch[parsed.type].call(this, parsed)
   }
 

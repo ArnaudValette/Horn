@@ -41,7 +41,7 @@ import {
 import { TreeParserProto } from "./TreeParserProto"
 
 const a = performance.now()
-class OrgBracketElementsParser extends TreeParserProto {
+export class OrgBracketElementsParser extends TreeParserProto {
   commandMap: CommandMap = {}
   constructor() {
     super(orgForest, orgWakeUpChar)
