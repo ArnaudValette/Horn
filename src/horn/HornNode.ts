@@ -15,23 +15,23 @@ export class HornNode {
     level: number,
     nType: string,
     textContent: string,
+    glitterNodes?: ParsedGlitter,
     parent?: HornNode | null
   ) {
     this.id = id
     this.level = level
     this.nType = nType
     this.textContent = textContent
+    //@ts-ignore
+    this.glitterNodes = this.processGlitterNodes(glitterNodes)
     if (parent) {
       this.parent = parent
     }
   }
-  processGlitterNodes() {
-    //this.replaceTODO()
-    //this.parseBracketNodes()
-    //this.replaceTextFormat()
+  processGlitterNodes(gN: ParsedGlitter | undefined) {
+    return gN
   }
-  replaceTODO() {
-  }
+  replaceTODO() {}
 }
 
 // a glitterNode is a marker that keeps a text in memory and tracks a position where
@@ -56,9 +56,10 @@ export class FootNode extends HornNode {
     id: number,
     level: number,
     textContent: string,
+    glitterNodes?: ParsedGlitter,
     parent?: HornNode | null
   ) {
-    super(id, 0, "footNote", textContent, null)
+    super(id, 0, "footNote", textContent, glitterNodes, null)
     this.noteId = level
   }
 }
@@ -72,9 +73,10 @@ export class StructTemplateNode extends HornNode {
     nType: string,
     secondType: string,
     textContent: string,
+    glitterNodes?: ParsedGlitter,
     parent?: HornNode | null
   ) {
-    super(id, level, nType, "", null)
+    super(id, level, nType, "", glitterNodes, null)
     this.StructureType = secondType
     this.Info = textContent
   }
@@ -83,14 +85,14 @@ export class StructTemplateNode extends HornNode {
 // Prototyping:
 export class tableRootNode extends HornNode {
   children: Array<tableRowNode> = []
-  constructor(id: number) {
-    super(id, 0, "table-root", "", null)
+  constructor(id: number, glitterNodes?: ParsedGlitter) {
+    super(id, 0, "table-root", "", glitterNodes, null)
   }
 }
 
 export class tableRowNode extends HornNode {
   children: Array<HornNode> = []
-  constructor(id: number) {
-    super(id, 0, "table-row", "", null)
+  constructor(id: number, glitterNodes?: ParsedGlitter) {
+    super(id, 0, "table-row", "", glitterNodes, null)
   }
 }

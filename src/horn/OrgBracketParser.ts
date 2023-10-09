@@ -40,7 +40,6 @@ import {
 } from "./OrgParserData"
 import { TreeParserProto } from "./TreeParserProto"
 
-const a = performance.now()
 export class OrgBracketElementsParser extends TreeParserProto {
   commandMap: CommandMap = {}
   constructor() {
@@ -61,7 +60,8 @@ export class OrgBracketElementsParser extends TreeParserProto {
       this.parseChar((x, y) => cond(x), children, char, name, isRedundant)
   }
 
-  parse(line: string) {
+  parse(line: string): [TreeParserNodes, TextDelimitations] {
+    this.resetAll()
     for (let i = 0, j = line.length; i < j; i++) {
       const char = line[i]
       if (this.shouldNotToggle(char, i)) {
@@ -82,18 +82,19 @@ export class OrgBracketElementsParser extends TreeParserProto {
       }
     }
     this.delimitText()
+    return [this.nodeMap, this.textDelimitations]
   }
 }
 
-const txt =
-  "there are dates [2023-10-03 Tue], false [ brackets and [ also ] sometimes [[file:/file][nameFile]] some [[~/img.png]] [fn:3] ]] ]] [ ] (checkbox) and : [fnde] [232545857685-222222-444565 Mon] [0%] [100%] [0/] [0/2]"
-
-const orgparser = new OrgBracketElementsParser()
-orgparser.parse(txt)
-const b = performance.now()
-console.log(orgparser.nodeMap)
-//You can call another parser e.g. FormatParser on the textDelimitations
-orgparser.textDelimitations.forEach((lim) =>
-  console.log(txt.substring(lim[0], lim[1]))
-)
-console.log(`${b - a} milliseconds`)
+// const txt =
+//   "there are dates [2023-10-03 Tue], false [ brackets and [ also ] sometimes [[file:/file][nameFile]] some [[~/img.png]] [fn:3] ]] ]] [ ] (checkbox) and : [fnde] [232545857685-222222-444565 Mon] [0%] [100%] [0/] [0/2]"
+//
+// const orgparser = new OrgBracketElementsParser()
+// orgparser.parse(txt)
+// const b = performance.now()
+// //console.log(orgparser.nodeMap)
+// //You can call another parser e.g. FormatParser on the textDelimitations
+// orgparser.textDelimitations.forEach((lim) =>
+//   console.log(txt.substring(lim[0], lim[1]))
+// )
+// console.log(`${b - a} milliseconds`)

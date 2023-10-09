@@ -8,8 +8,8 @@ export class TreeParserProto {
   toggleChar: string
   start: number = 0
   end: number = 0
-  nodeMap: Array<TreeParserNode> = []
-  textDelimitations: Array<Array<number>> = []
+  nodeMap: TreeParserNodes = []
+  textDelimitations: TextDelimitations = []
 
   constructor(parserValidTrees: Forest, wakeUpChar: string) {
     this.toggleChar = wakeUpChar
@@ -83,6 +83,7 @@ export class TreeParserProto {
       e.start,
       e.end,
     ])
+    if (!nodeLimitations || nodeLimitations.length === 0) return
     if (nodeLimitations[0][0] !== 0) {
       this.textDelimitations.push([0, nodeLimitations[0][0]])
     }
@@ -103,6 +104,14 @@ export class TreeParserProto {
     return [curr as Forest, prev as Forest]
   }
 
+  resetAll() {
+    this.resetState()
+    this.matched = false
+    this.start = 0
+    this.end = 0
+    this.nodeMap = []
+    this.textDelimitations = []
+  }
   resetState() {
     this.path = []
     this.next = Object.keys(this.forest)

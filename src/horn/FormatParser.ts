@@ -1,18 +1,4 @@
-type Flag = number
-type FlagsType = { [key: string]: Flag }
-type Marker = {
-  type: Flag
-  position: number
-  first?: boolean
-  adjective?: Flag
-  end?: number
-}
-type MarkerWithTextContent = Marker & { text: string }
-type MarkerWithTextContentAndEnd = Marker & { text: string; end: number }
-
-type Markers = { [key: number]: Marker }
-
-class FormatParser {
+export class FormatParser {
   flags: FlagsType
   markers: Array<Marker>
   markerStack: Array<Marker | MarkerWithTextContent>

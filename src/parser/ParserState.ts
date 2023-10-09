@@ -20,6 +20,7 @@ class ParserState implements _ParserState {
   footNoteMode: string | null = null
   footNotes: Array<HornNode> = []
   footNoteId: number | null = null
+  minLevel: number
 
   constructor() {
     this.roots = []
@@ -32,6 +33,7 @@ class ParserState implements _ParserState {
     this.listMode = false
     this.table = new Table()
     this.srcMode = null
+    this.minLevel = 9999999
   }
 
   transferFootNotes() {
@@ -93,7 +95,13 @@ class ParserState implements _ParserState {
     )
   }
   HN(p: ParsingResult) {
-    return new HornNode(this.count, p.level, p.type as string, p.text)
+    return new HornNode(
+      this.count,
+      p.level,
+      p.type as string,
+      p.text,
+      p.glitterNodes
+    )
   }
   ST(p: ParsingResult) {
     const text2arr = p.text.split(" ")
@@ -157,13 +165,17 @@ class ParserState implements _ParserState {
     this.resetMode()
     const h = this.HN(p)
 
-    if (this.lastHeading && this.lastHeading.level < p.level) {
+    if (p.level <= this.minLevel) {
+      this.minLevel = p.level
+      this.roots.push(h)
+    } else if (this.lastHeading && this.lastHeading.level < p.level) {
       this.lastHeading.children.push(h)
     } else {
       this.mostRecentHeading(p.level)?.children.push(h)
     }
     this.subscribeHeading(h)
   }
+
   appendList(p: ParsingResult) {
     const h = this.HN(p)
 

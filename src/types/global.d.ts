@@ -13,6 +13,23 @@ type Tags = Array<Tag>
 type Array2D<T> = Array<Array<T>>
 type HornType = string
 type GlitterType = string
+type Flag = number
+type FlagsType = { [key: string]: Flag }
+type Marker = {
+  type: Flag
+  position: number
+  first?: boolean
+  adjective?: Flag
+  end?: number
+}
+type MarkerWithTextContent = Marker & { text: string }
+type MarkerWithTextContentAndEnd = Marker & { text: string; end: number }
+type TreeParserNodes = Array<TreeParserNode>
+type TextDelimitations = Array<Array<number>>
+
+type Markers = { [key: number]: Marker }
+
+type ParsedGlitter = Array<TreeParserNode | Marker | MarkerWithTextContent>
 
 type GenericNode = {
   nType: HornType
