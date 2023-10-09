@@ -34,26 +34,6 @@ export class HornNode {
   }
 }
 
-class PossibleToken {
-  textContent: string
-  type: number
-  submitted: boolean = false
-  constructor(type: number, firstCharacter?: string) {
-    this.textContent = firstCharacter || ""
-    this.type = type
-  }
-  append(char: string) {
-    this.textContent = this.textContent.concat(char)
-  }
-  revoke() {
-    return this.textContent
-  }
-  publish() {
-    this.submitted = true
-    return this.textContent
-  }
-}
-
 // a glitterNode is a marker that keeps a text in memory and tracks a position where
 // a more complete text has this special kind of token
 // ex : hello, *this is bold text*
