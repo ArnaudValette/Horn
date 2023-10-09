@@ -3,7 +3,6 @@
    2 : translate data structure into project
  */
 import { FormatParser } from "./horn/FormatParser"
-import { HornNode } from "./horn/HornNode"
 import { OrgBracketElementsParser } from "./horn/OrgBracketParser"
 import Parser from "./parser/Parser"
 import * as fs from "fs"
