@@ -17,7 +17,7 @@ type Flag = number
 type FlagsType = { [key: string]: Flag }
 type Marker = {
   type: Flag
-  position: number
+  start: number
   first?: boolean
   adjective?: Flag
   end?: number

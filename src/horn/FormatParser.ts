@@ -50,7 +50,7 @@ export class FormatParser {
 
   #createFormatMap() {
     this.#resetStackAndFlag()
-    this.markers.sort((a, b) => a.position - b.position)
+    this.markers.sort((a, b) => a.start - b.start)
     for (let i = 0, j = this.markers.length; i < j; i++) {
       if (this.markers[i + 1]) {
         const m = this.markers[i]
@@ -60,10 +60,10 @@ export class FormatParser {
           : this.currentFlag ^ m.type
         this.markerStack.push({
           adjective: this.currentFlag,
-          position: m.position+this.start,
+          start: m.start+this.start,
           type: m.type,
-          end: m2.position+this.start,
-          text: this.line.substring(m.position + 1, m2.position),
+          end: m2.start+this.start,
+          text: this.line.substring(m.start + 1, m2.start),
         })
       }
     }
@@ -80,7 +80,7 @@ export class FormatParser {
       return this.markerStack.push(
         {
           adjective:0,
-          position: 0+this.start,
+          start: 0+this.start,
           type: 0,
           end:l.length+this.start,
           text: l,
@@ -89,14 +89,14 @@ export class FormatParser {
         }
       ) 
     }
-    if (fM.position !== 0+this.start) {
+    if (fM.start !== 0+this.start) {
       this.markerStack = [
         {
           adjective: 0,
-          position: 0+this.start,
-          end: fM.position,
+          start: 0+this.start,
+          end: fM.start,
           type: 0,
-          text: l.substring(0, fM.position - this.start),
+          text: l.substring(0, fM.start - this.start),
           //@ts-ignore
         debugStart:true
         },
@@ -106,7 +106,7 @@ export class FormatParser {
     if (lM.end !== l.length - 1 + this.start) {
       this.markerStack.push({
         adjective: 0,
-        position: lM.end,
+        start: lM.end,
         end: l.length+this.start,
         type: 0,
         text: l.substring(lM.end + 1 - this.start, l.length),
@@ -120,7 +120,7 @@ export class FormatParser {
   }
   #match(n: number, flag: Flag, cond: boolean) {
     const adjective = cond ? this.currentFlag ^ flag : this.currentFlag | flag
-    const marker = { type: flag, position: n }
+    const marker = { type: flag, start: n }
     if (cond) {
       const index = this.#findByFlag(flag)
       const first = this.markerStack[index]
