@@ -29,17 +29,48 @@ export class GlitterNode {
   end: number
   text: string
   type: string | number
-  constructor(start: number, end: number, text: string, type: string | number) {
-    this.start = start
-    this.end = end
-    this.text = text
-    this.type = type
+  constructor(g: PreGlitter) {
+    this.start = g.start
+    this.end = g.end
+    this.text = g.text
+    this.type = g.type
   }
 }
 
 //{ start: 9, end: 16, text: '[28%]', type: 'cookiePercent' }
-export class orgCookiePercent extends GlitterNode {}
-export class orgCookieRatio extends GlitterNode {}
+export class orgCookiePercent extends GlitterNode {
+  percentage: number
+  constructor(g: PreGlitter) {
+    super(g)
+    this.percentage = this.#setPercentage(g.text)
+  }
+  #setPercentage(s: string): number {
+    return parseInt(s.substring(1, s.length - 2))
+  }
+  getText() {
+    return `${this.percentage}%`
+  }
+}
+
+export class orgCookieRatio extends GlitterNode {
+  current: number
+  total: number
+  constructor(g: PreGlitter) {
+    super(g)
+    const [a, b] = this.getRatio(g.text)
+    this.current = a
+    this.total = b
+  }
+  getRatio(s: string): number[] {
+    return s
+      .substring(1, s.length - 1)
+      .split("/")
+      .map((str) => parseInt(str))
+  }
+  getText() {
+    return `${this.current}/${this.total}`
+  }
+}
 export class orgDate extends GlitterNode {}
 export class orgCheckBoxEmpty extends GlitterNode {}
 export class orgImage extends GlitterNode {}

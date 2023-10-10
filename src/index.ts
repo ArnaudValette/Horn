@@ -3,6 +3,7 @@
    2 : translate data structure into project
  */
 import { FormatParser } from "./horn/FormatParser"
+import { orgCookiePercent } from "./horn/GlitterNodes"
 import { OrgBracketElementsParser } from "./horn/OrgBracketParser"
 import Parser from "./parser/Parser"
 import * as fs from "fs"
@@ -35,7 +36,7 @@ function recurseInNode(x: HornNode, i?: number) {
     //console.log(x.glitterNodes)
     x.glitterNodes.forEach((g) => console.log("formated: ", g.text))
   } else {
-    console.log(x.nType, x.textContent)
+    //console.log(x.nType, x.textContent)
   }
   if (x.children.length > 0) {
     x.children.forEach((y) => recurseInNode(y as HornNode))
@@ -44,3 +45,10 @@ function recurseInNode(x: HornNode, i?: number) {
 
 const b = performance.now()
 console.log(`TIMING: ${b - a} ms`)
+const lll = "[989/456]"
+console.log(
+  lll
+    .substring(1, lll.length - 1)
+    .split("/")
+    .map((str) => parseInt(str))
+)

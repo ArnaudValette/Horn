@@ -31,7 +31,7 @@ export class FormatParser {
     line: string,
     start: number,
     end: number
-  ): Array<MarkerWithTextContent> {
+  ): Array<MarkerWithTextContentAndEnd> {
     this.resetState()
     this.start = start
     this.end = end
@@ -50,7 +50,7 @@ export class FormatParser {
     }
     this.#createFormatMap()
     this.#appendIfNecessary()
-    return this.markerStack as Array<MarkerWithTextContent>
+    return this.markerStack as Array<MarkerWithTextContentAndEnd>
   }
 
   #resetStackAndFlag() {

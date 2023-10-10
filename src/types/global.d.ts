@@ -54,7 +54,8 @@ type TextDelimitations = Array<Array<number>>
 
 type Markers = { [key: number]: Marker }
 
-type ParsedGlitter = Array<TreeParserNode | MarkerWithTextContent>
+type PreGlitter = TreeParserNode | MarkerWithTextContentAndEnd
+type ParsedGlitter = Array<PreGlitter>
 
 type GenericNode = {
   nType: HornType
