@@ -3,7 +3,7 @@
    2 : translate data structure into project
  */
 import { FormatParser } from "./horn/FormatParser"
-import { orgCookiePercent } from "./horn/GlitterNodes"
+import { orgCookiePercent, orgDate } from "./horn/GlitterNodes"
 import { OrgBracketElementsParser } from "./horn/OrgBracketParser"
 import Parser from "./parser/Parser"
 import * as fs from "fs"
@@ -45,10 +45,7 @@ function recurseInNode(x: HornNode, i?: number) {
 
 const b = performance.now()
 console.log(`TIMING: ${b - a} ms`)
-const lll = "[989/456]"
-console.log(
-  lll
-    .substring(1, lll.length - 1)
-    .split("/")
-    .map((str) => parseInt(str))
-)
+
+const node = { start: 9, end: 16, text: "[2023-10-10 Tue]", type: "date" }
+const glit = new orgDate(node as PreGlitter)
+console.log(glit)

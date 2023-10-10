@@ -57,11 +57,11 @@ export class orgCookieRatio extends GlitterNode {
   total: number
   constructor(g: PreGlitter) {
     super(g)
-    const [a, b] = this.getRatio(g.text)
+    const [a, b] = this.#setRatio(g.text)
     this.current = a
     this.total = b
   }
-  getRatio(s: string): number[] {
+  #setRatio(s: string): number[] {
     return s
       .substring(1, s.length - 1)
       .split("/")
@@ -71,7 +71,31 @@ export class orgCookieRatio extends GlitterNode {
     return `${this.current}/${this.total}`
   }
 }
-export class orgDate extends GlitterNode {}
+export class orgDate extends GlitterNode {
+  weekday: string
+  day: number
+  month: number
+  year: number
+  constructor(g: PreGlitter) {
+    super(g)
+    const [a, b, c, d] = this.#setDate(g.text)
+    this.year = a
+    this.month = b
+    this.day = c
+    this.weekday = d
+  }
+  #setDate(s: string): [number, number, number, string] {
+    const [a, b, c] = s
+      .substring(1, s.length - 5)
+      .split("-")
+      .map((x) => parseInt(x))
+    const d = s.substring(s.length - 4, s.length - 1)
+    return [a, b, c, d]
+  }
+  getText() {
+    return `${this.weekday} ${this.day} ${this.month}, ${this.year}`
+  }
+}
 export class orgCheckBoxEmpty extends GlitterNode {}
 export class orgImage extends GlitterNode {}
 export class orgLink extends GlitterNode {}
