@@ -1,3 +1,11 @@
+/*
+   TODO: add a markerStack.push method,
+   simplify conditions for knowing if a markerStack should
+   be added before and after the stack, or if the stack is empty,
+
+   simplify dealing with text offset, where we're parsing a substring,
+   but need to retain information about the parent string.
+ */
 export class FormatParser {
   flags: FlagsType
   markers: Array<Marker>
