@@ -3,7 +3,6 @@ import { GlitterNode } from "./GlitterNodes"
 export class HornNode {
   children: Array<HornNode> = []
   id: number
-  parent: HornNode | null = null
   level: number
   glitterNodes: GlitterNode[] = []
   tags: Tags = []
@@ -15,7 +14,7 @@ export class HornNode {
     level: number,
     nType: string,
     textContent: string,
-    glitterNodes?: ParsedGlitter,
+    glitterNodes?: ParsedGlitter
   ) {
     this.id = id
     this.level = level
@@ -30,7 +29,6 @@ export class HornNode {
   replaceTODO() {}
 }
 
-
 export class FootNode extends HornNode {
   //children: Array<HornNode> = []
   noteId: number = 0
@@ -38,7 +36,7 @@ export class FootNode extends HornNode {
     id: number,
     level: number,
     textContent: string,
-    glitterNodes?: ParsedGlitter,
+    glitterNodes?: ParsedGlitter
   ) {
     super(id, 0, "footNote", textContent, glitterNodes)
     this.noteId = level
@@ -54,7 +52,7 @@ export class StructTemplateNode extends HornNode {
     nType: string,
     secondType: string,
     textContent: string,
-    glitterNodes?: ParsedGlitter,
+    glitterNodes?: ParsedGlitter
   ) {
     super(id, level, nType, "", glitterNodes)
     this.StructureType = secondType
