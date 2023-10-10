@@ -21,7 +21,7 @@ const formatParser = new FormatParser(flags)
 const bracketParser = new OrgBracketElementsParser()
 const x = new Parser(bracketParser, formatParser)
 
-const data = fs.readFileSync("./data/ex2.org")
+const data = fs.readFileSync("./data/org.org")
 x.parseOrg(data)
 
 x.state.roots.forEach((value: HornNode, index: number) => {
@@ -30,10 +30,12 @@ x.state.roots.forEach((value: HornNode, index: number) => {
 
 function recurseInNode(x: HornNode, i?: number) {
   if (i) console.log(i)
-  console.log(x)
   if (x.glitterNodes && x.glitterNodes.length > 0) {
     //console.log(x.textContent)
-    console.log(x.glitterNodes)
+    //console.log(x.glitterNodes)
+    x.glitterNodes.forEach((g) => console.log("formated: ", g.text))
+  } else {
+    console.log(x.nType, x.textContent)
   }
   if (x.children.length > 0) {
     x.children.forEach((y) => recurseInNode(y as HornNode))
