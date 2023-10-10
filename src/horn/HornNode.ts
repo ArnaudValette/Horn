@@ -1,3 +1,5 @@
+import { GlitterNode } from "./GlitterNodes"
+
 export class HornNode {
   children: Array<HornNode> = []
   id: number
@@ -28,20 +30,6 @@ export class HornNode {
   replaceTODO() {}
 }
 
-// a glitterNode is a marker that keeps a text in memory and tracks a position where
-// a more complete text has this special kind of token
-// ex : hello, *this is bold text*
-// "this is bold text", 7, bold
-export class GlitterNode {
-  text: string = ""
-  position: number = 0
-  gType: number
-  constructor(text: string, position: number, type: number) {
-    this.text = text
-    this.position = position
-    this.gType = type
-  }
-}
 
 export class FootNode extends HornNode {
   //children: Array<HornNode> = []
@@ -52,7 +40,7 @@ export class FootNode extends HornNode {
     textContent: string,
     glitterNodes?: ParsedGlitter,
   ) {
-    super(id, 0, "footNote", textContent, glitterNodes, null)
+    super(id, 0, "footNote", textContent, glitterNodes)
     this.noteId = level
   }
 }
@@ -68,7 +56,7 @@ export class StructTemplateNode extends HornNode {
     textContent: string,
     glitterNodes?: ParsedGlitter,
   ) {
-    super(id, level, nType, "", glitterNodes, null)
+    super(id, level, nType, "", glitterNodes)
     this.StructureType = secondType
     this.Info = textContent
   }
@@ -78,13 +66,13 @@ export class StructTemplateNode extends HornNode {
 export class tableRootNode extends HornNode {
   children: Array<tableRowNode> = []
   constructor(id: number, glitterNodes?: ParsedGlitter) {
-    super(id, 0, "table-root", "", glitterNodes, null)
+    super(id, 0, "table-root", "", glitterNodes)
   }
 }
 
 export class tableRowNode extends HornNode {
   children: Array<HornNode> = []
   constructor(id: number, glitterNodes?: ParsedGlitter) {
-    super(id, 0, "table-row", "", glitterNodes, null)
+    super(id, 0, "table-row", "", glitterNodes)
   }
 }

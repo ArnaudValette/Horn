@@ -76,6 +76,7 @@ type orgBracketType =
   | "image"
   | "link"
   | "footnote"
+
 interface orgBracketNode {
   done: boolean
   type: orgBracketType
