@@ -40,7 +40,7 @@ export class GlitterNode {
 //{ start: 9, end: 16, text: '[28%]', type: 'cookiePercent' }
 export class orgCookiePercent extends GlitterNode {
   percentage: number
-  constructor(g: PreGlitter) {
+  constructor(g: TreeParserNode) {
     super(g)
     this.percentage = this.#setPercentage(g.text)
   }
@@ -55,7 +55,7 @@ export class orgCookiePercent extends GlitterNode {
 export class orgCookieRatio extends GlitterNode {
   current: number
   total: number
-  constructor(g: PreGlitter) {
+  constructor(g: TreeParserNode) {
     super(g)
     const [a, b] = this.#setRatio(g.text)
     this.current = a
@@ -76,7 +76,7 @@ export class orgDate extends GlitterNode {
   day: number
   month: number
   year: number
-  constructor(g: PreGlitter) {
+  constructor(g: TreeParserNode) {
     super(g)
     const [a, b, c, d] = this.#setDate(g.text)
     this.year = a
@@ -96,7 +96,16 @@ export class orgDate extends GlitterNode {
     return `${this.weekday} ${this.day} ${this.month}, ${this.year}`
   }
 }
-export class orgCheckBoxEmpty extends GlitterNode {}
+export class orgCheckBox extends GlitterNode {
+  checked: boolean
+  constructor(g: TreeParserNode) {
+    super(g)
+    this.checked = this.#setChecked(g.type)
+  }
+  #setChecked(t: orgBracketType): boolean {
+    return t === "checkboxCheck"
+  }
+}
 export class orgImage extends GlitterNode {}
 export class orgLink extends GlitterNode {}
 export class orgFootnote extends GlitterNode {}
