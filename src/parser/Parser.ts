@@ -74,7 +74,7 @@ class Parser {
     ]
     textDelimitations.forEach((lim: Array<number>) => {
       const markersMap = this.formatParser.parse(
-        parsed.text.substring(lim[0], lim[1])
+        parsed.text, lim[0], lim[1]
       )
       if (markersMap.length > 0) {
         glit.push(...markersMap)

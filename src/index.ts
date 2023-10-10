@@ -24,10 +24,11 @@ const x = new Parser(bracketParser, formatParser)
 const data = fs.readFileSync("./data/example.org")
 x.parseOrg(data)
 
-x.state.roots.forEach((value:HornNode) => {
-    recurseInNode(value)
-})
-
+recurseInNode(x.state.roots[0])
+// x.state.roots.forEach((value:HornNode) => {
+//     recurseInNode(value)
+// })
+// 
 function recurseInNode(x: HornNode) {
     if (x.glitterNodes && x.glitterNodes.length > 0) {
         console.log(x.glitterNodes)

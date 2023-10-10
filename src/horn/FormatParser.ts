@@ -4,6 +4,8 @@ export class FormatParser {
   markerStack: Array<Marker | MarkerWithTextContent>
   currentFlag: Flag
   line: string = ""
+  start:number= 0
+  end:number = 0
   constructor(flags: FlagsType) {
     this.flags = flags
     this.markers = []
@@ -16,28 +18,20 @@ export class FormatParser {
     this.markers = []
     this.line = ""
   }
-  parse(line: string) {
+  parse(line: string, start:number, end:number) {
     this.resetState()
-    this.line = line
-    for (let i = 0, j = line.length; i < j; i++) {
-      const char = line[i]
+    this.start = start
+    this.end = end
+    this.line = line.substring(start,end)
+    for (let i = 0, j = this.line.length; i < j; i++) {
+      const char = this.line[i]
       if (this.flags[char]) {
         const cond = this.#hasFlag(this.flags[char], this.currentFlag)
         this.currentFlag = this.#match(i, this.flags[char], cond)
       }
     }
     this.#createFormatMap()
-    if(this.markerStack.length === 0){
-      this.markerStack.push(
-        {
-          adjective:0,
-          position: 0,
-          type: 0,
-          end:line.length,
-          text: this.line,
-        }
-      ) 
-    }
+    this.#appendIfNecessary()
     return this.markerStack
   }
 
@@ -48,7 +42,7 @@ export class FormatParser {
 
   #createFormatMap() {
     this.#resetStackAndFlag()
-    this.markers.sort((a, b) => a.position - b.position)
+    //this.markers.sort((a, b) => a.position - b.position)
     for (let i = 0, j = this.markers.length; i < j; i++) {
       if (this.markers[i + 1]) {
         const m = this.markers[i]
@@ -58,43 +52,58 @@ export class FormatParser {
           : this.currentFlag ^ m.type
         this.markerStack.push({
           adjective: this.currentFlag,
-          position: m.position,
+          position: m.position+this.start,
           type: m.type,
-          end: m2.position,
+          end: m2.position+this.start,
           text: this.line.substring(m.position + 1, m2.position),
         })
       }
     }
-    this.#appendIfNecessary()
   }
 
   #appendIfNecessary() {
     const mS = this.markerStack
     const fM = mS[0]
     const lM: MarkerWithTextContentAndEnd = mS[
-      mS.length - 1
+      mS.length - 1 
     ] as MarkerWithTextContentAndEnd
     const l = this.line
-    if (!fM || !lM) return
-    if (fM.position !== 0) {
+    if (!fM || !lM){
+      return this.markerStack.push(
+        {
+          adjective:0,
+          position: 0+this.start,
+          type: 0,
+          end:l.length+this.start,
+          text: l,
+          //@ts-ignore
+        debugNone:true
+        }
+      ) 
+    }
+    if (fM.position !== 0+this.start) {
       this.markerStack = [
         {
           adjective: 0,
-          position: 0,
+          position: 0+this.start,
           end: fM.position,
           type: 0,
-          text: l.substring(0, fM.position),
+          text: l.substring(0, fM.position - this.start),
+          //@ts-ignore
+        debugStart:true
         },
         ...this.markerStack,
       ]
     }
-    if (lM.end !== l.length - 1) {
+    if (lM.end !== l.length - 1 + this.start) {
       this.markerStack.push({
         adjective: 0,
         position: lM.end,
-        end: l.length,
+        end: l.length+this.start,
         type: 0,
         text: l.substring(lM.end + 1, l.length),
+        //@ts-ignore
+        debugEnd:true
       })
     }
   }
