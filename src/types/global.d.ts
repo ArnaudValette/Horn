@@ -48,13 +48,13 @@ enum rowTypeEnum {
 //   start: Int
 //   end: Int
 // }
-// 
+//
 interface HornNode extends GenericNode {
   children: Array<HornNode>
   id: Int
   parent: HornNode | null
   level: Int
-  glitterNodes: GlitterNode[] 
+  glitterNodes: GlitterNode[]
   tags: Tags
 }
 
@@ -96,6 +96,6 @@ type TreeChars = Array<TreeChar>
 type TreeParserNode = {
   start: number
   end: number
-  textContent: string
+  text: string
   type: orgBracketType
 }
