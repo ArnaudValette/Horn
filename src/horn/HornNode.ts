@@ -1,5 +1,3 @@
-import { OrgBracketElementsParser } from "./OrgBracketParser"
-
 export class HornNode {
   children: Array<HornNode> = []
   id: number
@@ -16,7 +14,6 @@ export class HornNode {
     nType: string,
     textContent: string,
     glitterNodes?: ParsedGlitter,
-    parent?: HornNode | null
   ) {
     this.id = id
     this.level = level
@@ -24,9 +21,6 @@ export class HornNode {
     this.textContent = textContent
     //@ts-ignore
     this.glitterNodes = this.processGlitterNodes(glitterNodes)
-    if (parent) {
-      this.parent = parent
-    }
   }
   processGlitterNodes(gN: ParsedGlitter | undefined) {
     return gN
@@ -57,7 +51,6 @@ export class FootNode extends HornNode {
     level: number,
     textContent: string,
     glitterNodes?: ParsedGlitter,
-    parent?: HornNode | null
   ) {
     super(id, 0, "footNote", textContent, glitterNodes, null)
     this.noteId = level
@@ -74,7 +67,6 @@ export class StructTemplateNode extends HornNode {
     secondType: string,
     textContent: string,
     glitterNodes?: ParsedGlitter,
-    parent?: HornNode | null
   ) {
     super(id, level, nType, "", glitterNodes, null)
     this.StructureType = secondType
