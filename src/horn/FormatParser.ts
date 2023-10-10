@@ -12,8 +12,8 @@ export class FormatParser {
   markerStack: Array<Marker | MarkerWithTextContent>
   currentFlag: Flag
   line: string = ""
-  start:number= 0
-  end:number = 0
+  start: number = 0
+  end: number = 0
   constructor(flags: FlagsType) {
     this.flags = flags
     this.markers = []
@@ -27,19 +27,22 @@ export class FormatParser {
     this.line = ""
   }
   // TODO: deal with verbatim as a blocking type to revoke any marker
-  parse(line: string, start:number, end:number) {
+  parse(
+    line: string,
+    start: number,
+    end: number
+  ): Array<MarkerWithTextContent> {
     this.resetState()
     this.start = start
     this.end = end
-    this.line = line.substring(start,end)
+    this.line = line.substring(start, end)
     for (let i = 0, j = this.line.length; i < j; i++) {
       const char = this.line[i]
       if (this.flags[char]) {
-        if(this.line[i+1] && this.line[i+1] === char){
+        if (this.line[i + 1] && this.line[i + 1] === char) {
           // if double symbol edge case, jump over it
-          i = i+1
-        }
-        else{
+          i = i + 1
+        } else {
           const cond = this.#hasFlag(this.flags[char], this.currentFlag)
           this.currentFlag = this.#match(i, this.flags[char], cond)
         }
@@ -47,7 +50,7 @@ export class FormatParser {
     }
     this.#createFormatMap()
     this.#appendIfNecessary()
-    return this.markerStack
+    return this.markerStack as Array<MarkerWithTextContent>
   }
 
   #resetStackAndFlag() {
@@ -63,14 +66,14 @@ export class FormatParser {
         const m = this.markers[i]
         const m2 = this.markers[i + 1]
         this.currentFlag = m.first
-            ? this.currentFlag | m.type
-            : this.currentFlag ^ m.type
+          ? this.currentFlag | m.type
+          : this.currentFlag ^ m.type
         this.markerStack.push({
-            adjective: this.currentFlag,
-            start: m.start + this.start,
-            type: m.type,
-            end: m2.start + this.start,
-            text: this.line.substring(m.start + 1, m2.start),
+          adjective: this.currentFlag,
+          start: m.start + this.start,
+          type: m.type,
+          end: m2.start + this.start,
+          text: this.line.substring(m.start + 1, m2.start),
         })
       }
     }
@@ -80,32 +83,30 @@ export class FormatParser {
     const mS = this.markerStack
     const fM = mS[0]
     const lM: MarkerWithTextContentAndEnd = mS[
-      mS.length - 1 
+      mS.length - 1
     ] as MarkerWithTextContentAndEnd
     const l = this.line
-    if (!fM || !lM){
-      return this.markerStack.push(
-        {
-          adjective:0,
-          start: 0+this.start,
-          type: 0,
-          end:l.length+this.start,
-          text: l,
-          //@ts-ignore
-        debugNone:true
-        }
-      ) 
+    if (!fM || !lM) {
+      return this.markerStack.push({
+        adjective: 0,
+        start: 0 + this.start,
+        type: 0,
+        end: l.length + this.start,
+        text: l,
+        //@ts-ignore
+        debugNone: true,
+      })
     }
-    if (fM.start !== 0+this.start) {
+    if (fM.start !== 0 + this.start) {
       this.markerStack = [
         {
           adjective: 0,
-          start: 0+this.start,
+          start: 0 + this.start,
           end: fM.start,
           type: 0,
           text: l.substring(0, fM.start - this.start),
           //@ts-ignore
-        debugStart:true
+          debugStart: true,
         },
         ...this.markerStack,
       ]
@@ -114,11 +115,11 @@ export class FormatParser {
       this.markerStack.push({
         adjective: 0,
         start: lM.end,
-        end: l.length+this.start,
+        end: l.length + this.start,
         type: 0,
         text: l.substring(lM.end + 1 - this.start, l.length),
         //@ts-ignore
-        debugEnd:true
+        debugEnd: true,
       })
     }
   }

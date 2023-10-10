@@ -1,7 +1,5 @@
 import Table from "../horn/Table"
 import { FootNode, HornNode, StructTemplateNode } from "../horn/HornNode"
-import { ParsingResult } from "./Parser"
-import { OrgBracketElementsParser } from "../horn/OrgBracketParser"
 
 // TODO: it should be more logical, more focused, so that we can
 // perform the operation of passing the glitterNodes to ANY node easily

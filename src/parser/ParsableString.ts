@@ -1,5 +1,3 @@
-import { Regs, Rr, R, NextMethod, ParsingResult } from "./Parser"
-
 export class ParsableString extends String {
   regs: Regs = {
     /* primary nodes */
@@ -17,6 +15,7 @@ export class ParsableString extends String {
     HR: /^\s*-{5,}\s*$/,
     orgCode: /^:\s/,
     footNote: /^\[fn:\d+\]\s/,
+    paragraph: /.+/,
     /* secondary nodes */
   }
   constructor(s: string) {
@@ -34,7 +33,7 @@ export class ParsableString extends String {
     return (type as string).includes("table")
   }
 
-  parse(type: keyof Regs, nextMethod: NextMethod): NextMethod | ParsingResult {
+  parse(type: HornType, nextMethod: NextMethod): NextMethod | ParsingResult {
     const d: R = this.regs[type].exec(this.toString())
     if (!d) return nextMethod()
     const level =

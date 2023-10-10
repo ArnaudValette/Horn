@@ -4,6 +4,7 @@ type orgBracketType =
     | "cookieRatio"
     | "date"
     | "checkboxEmpty"
+    | "checkboxCheck"
     | "image"
     | "link"
     | "footnote"
@@ -21,20 +22,29 @@ let flags = {
  The type of a glitter node can be any of the flags or orgBracketType
    i.e. a number, or a string. Depending on this type parameter, the glitterNode
    should have specific parameters.
-*/ 
+*/
 
 export class GlitterNode {
-  text: string = ""
-  position: number = 0
-  gType: number
-  constructor(text: string, position: number, type: number) {
+  start: number
+  end: number
+  text: string
+  type: string | number
+  constructor(start: number, end: number, text: string, type: string | number) {
+    this.start = start
+    this.end = end
     this.text = text
-    this.position = position
-    this.gType = type
+    this.type = type
   }
 }
 
-//{ start: 9, end: 16, textContent: '[28%]', type: 'cookiePercent' }
-export class CookiePercent extends GlitterNode{
+//{ start: 9, end: 16, text: '[28%]', type: 'cookiePercent' }
+export class orgCookiePercent extends GlitterNode {}
+export class orgCookieRatio extends GlitterNode {}
+export class orgDate extends GlitterNode {}
+export class orgCheckBoxEmpty extends GlitterNode {}
+export class orgImage extends GlitterNode {}
+export class orgLink extends GlitterNode {}
+export class orgFootnote extends GlitterNode {}
 
-}
+//{start:0, end:15, adjective:0, type:0, text:"dddd"}
+export class Format extends GlitterNode {}

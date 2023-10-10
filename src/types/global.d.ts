@@ -11,7 +11,32 @@ type Tag = string
 type TableRowType = "row" | "first-row" | "ruler"
 type Tags = Array<Tag>
 type Array2D<T> = Array<Array<T>>
-type HornType = string
+type R = RegExpExecArray | null
+type Rr = RegExpExecArray
+type Regs = { [k in HornType]: RegExp }
+type ParsingResult = {
+  level: number
+  text: string
+  type: HornType
+  glitterNodes?: ParsedGlitter
+}
+type NextMethod = () => ParsingResult | NextMethod
+
+type FunctionDispatcher = Obj<(p: ParsingResult) => void>
+type HornType =
+  | "heading"
+  | "list"
+  | "nList"
+  | "sTemplate"
+  | "sTemplateEnd"
+  | "nSrc"
+  | "table"
+  | "tableSep"
+  | "empty"
+  | "HR"
+  | "orgCode"
+  | "footNote"
+  | "paragraph"
 type GlitterType = string
 type Flag = number
 type FlagsType = { [key: string]: Flag }
@@ -29,7 +54,7 @@ type TextDelimitations = Array<Array<number>>
 
 type Markers = { [key: number]: Marker }
 
-type ParsedGlitter = Array<TreeParserNode | Marker | MarkerWithTextContent>
+type ParsedGlitter = Array<TreeParserNode | MarkerWithTextContent>
 
 type GenericNode = {
   nType: HornType
@@ -52,10 +77,11 @@ enum rowTypeEnum {
 interface HornNode extends GenericNode {
   children: Array<HornNode>
   id: Int
-  parent: HornNode | null
   level: Int
   glitterNodes: GlitterNode[]
   tags: Tags
+  nType: string
+  textContent: string
 }
 
 type Roots = Array<HornNode>
