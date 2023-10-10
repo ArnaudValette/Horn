@@ -33,3 +33,8 @@ export class GlitterNode {
     this.gType = type
   }
 }
+
+//{ start: 9, end: 16, textContent: '[28%]', type: 'cookiePercent' }
+export class CookiePercent extends GlitterNode{
+
+}
