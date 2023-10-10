@@ -49,10 +49,7 @@ class Parser {
     console.log(`TIME TAKEN : ${b - a} ms`)
   }
 
-  #qualifyLine(s: string) {
-    const p = new ParsableString(s)
-    const parsed = p.start() as ParsingResult
-    /*
+  /*
 type HornType =
   | "heading"
   | "list"
@@ -68,26 +65,33 @@ type HornType =
   | "footNote"
   | "paragraph"
     */
-    // TODO: maybe internalize this
-    const [nodeMap, textDelimitations]: [TreeParserNodes, TextDelimitations] =
-      this.bracketParser.parse(parsed.text)
+  #qualifyLine(s: string) {
+    const [p, n, sentences] = this.#getParsingResults(s)
+    const Nodes: Array<TreeParserNode | MarkerWithTextContent> = [...n]
+    sentences.forEach((n: Array<number>) => {
+      const m = this.formatParser.parse(p.text, n[0], n[1])
+      if (m.length > 0) Nodes.push(...m)
+    })
 
-    const glit: Array<TreeParserNode | MarkerWithTextContent> = [...nodeMap]
-    textDelimitations.forEach((lim: Array<number>) => {
-      const markersMap = this.formatParser.parse(parsed.text, lim[0], lim[1])
-      if (markersMap.length > 0) {
-        glit.push(
-          ...(markersMap as Array<TreeParserNode | MarkerWithTextContent>)
-        )
-      }
+    Nodes.sort((a, b) => a.start - b.start)
+    this.fDispatch[p.type].call(this, {
+      ...p,
+      glitterNodes: Nodes,
     })
-    glit.sort((a, b) => a.start - b.start)
-    // TODO: treat bracketNodes and formatNodes as GlitterNodes, and transfer them
-    // to the hornNode
-    this.fDispatch[parsed.type].call(this, {
-      ...parsed,
-      glitterNodes: glit,
-    })
+  }
+
+  #getParsingResults(
+    s: string
+  ): [ParsingResult, TreeParserNodes, TextDelimitations] {
+    const p = this.#getParsedString(s)
+    const [n, t] = this.#getParsedNodes(p.text)
+    return [p, n, t]
+  }
+  #getParsedNodes(s: string): [TreeParserNodes, TextDelimitations] {
+    return this.bracketParser.parse(s)
+  }
+  #getParsedString(s: string): ParsingResult {
+    return new ParsableString(s).start() as ParsingResult
   }
 
   #footNote(p: ParsingResult) {
