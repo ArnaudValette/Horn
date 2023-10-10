@@ -27,6 +27,17 @@ export class FormatParser {
       }
     }
     this.#createFormatMap()
+    if(this.markerStack.length === 0){
+      this.markerStack.push(
+        {
+          adjective:0,
+          position: 0,
+          type: 0,
+          end:line.length,
+          text: this.line,
+        }
+      ) 
+    }
     return this.markerStack
   }
 
