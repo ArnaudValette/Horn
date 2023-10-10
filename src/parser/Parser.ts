@@ -80,6 +80,7 @@ class Parser {
         glit.push(...markersMap)
       }
     })
+    glit.sort((a,b)=> a.start - b.start)
     // TODO: treat bracketNodes and formatNodes as GlitterNodes, and transfer them
     // to the hornNode
     this.fDispatch[parsed.type].call(this, {
