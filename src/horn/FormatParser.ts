@@ -42,7 +42,7 @@ export class FormatParser {
 
   #createFormatMap() {
     this.#resetStackAndFlag()
-    //this.markers.sort((a, b) => a.position - b.position)
+    this.markers.sort((a, b) => a.position - b.position)
     for (let i = 0, j = this.markers.length; i < j; i++) {
       if (this.markers[i + 1]) {
         const m = this.markers[i]
@@ -101,7 +101,7 @@ export class FormatParser {
         position: lM.end,
         end: l.length+this.start,
         type: 0,
-        text: l.substring(lM.end + 1, l.length),
+        text: l.substring(lM.end + 1 - this.start, l.length),
         //@ts-ignore
         debugEnd:true
       })
