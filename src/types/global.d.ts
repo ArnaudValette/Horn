@@ -42,19 +42,19 @@ enum rowTypeEnum {
   isFirstRow,
 }
 
-type GlitterNode = GenericNode & {
-  href: string
-  src: string
-  start: Int
-  end: Int
-}
-
+// type GlitterNode = GenericNode & {
+//   href: string
+//   src: string
+//   start: Int
+//   end: Int
+// }
+// 
 interface HornNode extends GenericNode {
-  children: Array<HornNode | Array2D<string>>
+  children: Array<HornNode>
   id: Int
   parent: HornNode | null
   level: Int
-  glitterNodes: Array<GlitterNode>
+  glitterNodes: GlitterNode[] 
   tags: Tags
 }
 

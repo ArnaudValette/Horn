@@ -1,7 +1,7 @@
 import { OrgBracketElementsParser } from "./OrgBracketParser"
 
 export class HornNode {
-  children: Array<HornNode | Array2D<string>> = []
+  children: Array<HornNode> = []
   id: number
   parent: HornNode | null = null
   level: number
