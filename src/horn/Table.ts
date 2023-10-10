@@ -17,10 +17,11 @@ class Table {
     return root
   }
 
-  publishRow(s: string, rowType:rowTypeEnum , state:ParserState) {
+  publishRow(p: ParsingResult, rowType: rowTypeEnum, state: ParserState) {
     // we do not treat |----+----+---| for now
     if (rowType !== 0) {
-      const array: Array<string> = s
+      // TODO: add support for glitterNodes in tables !!!
+      const array: Array<string> = p.text
         .replace(/\|/g, " ")
         .replace(/\s+/g, " ")
         .replace(/(^\s)|(\s$)/g, "")
@@ -28,11 +29,11 @@ class Table {
       const res = new tableRowNode(state.count)
       state.inc()
       for (let i = 0, j = array.length; i < j; i++) {
-          if (array[i]) {
+        if (array[i]) {
           res.children.push(new HornNode(state.count, 0, "tableCell", array[i]))
-          } else {
+        } else {
           res.children.push(new HornNode(state.count, 0, "tableCell", ""))
-          }
+        }
         state.inc()
       }
       this.data.push(res)

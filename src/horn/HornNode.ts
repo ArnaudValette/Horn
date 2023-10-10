@@ -24,7 +24,7 @@ export class HornNode {
     this.glitterNodes = this.processGlitterNodes(glitterNodes)
   }
   processGlitterNodes(gN: ParsedGlitter) {
-    gN.forEach((g) => console.log(g.text))
+    if (!gN) return
     return gN
   }
   replaceTODO() {}

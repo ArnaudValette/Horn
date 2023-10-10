@@ -75,6 +75,9 @@ class ParserState implements _ParserState {
   }
 
   #trivialAppend(h: HornNode, p: ParsingResult) {
+    if (this.tableMode) {
+      return this.resetMode()
+    }
     if (this.srcMode) {
       return this.appendParagraph(p)
     }
@@ -147,12 +150,12 @@ class ParserState implements _ParserState {
     this.#trivialAppend(h, p)
   }
   appendEmpty(p: ParsingResult) {
+    const h = this.HN(p)
     if (this.footNoteMode) {
       const f = this.FN()
       this.footNotes.push(f)
       return (this.footNoteMode = null)
     }
-    const h = this.HN(p)
     this.#trivialAppend(h, p)
   }
   subscribeHeading(h: HornNode) {
@@ -262,15 +265,15 @@ class ParserState implements _ParserState {
 
   appendTableSep(p: ParsingResult) {
     this.tableModeToggle()
-    this.table.publishRow("", 0, this)
+    this.table.publishRow(p, 0, this)
   }
 
   appendTable(p: ParsingResult) {
     if (this.tableMode) {
-      this.table.publishRow(p.text, 2, this)
+      this.table.publishRow(p, 2, this)
     } else {
       this.tableModeToggle()
-      this.table.publishRow(p.text, 1, this)
+      this.table.publishRow(p, 1, this)
     }
   }
 
