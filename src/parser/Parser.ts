@@ -8,10 +8,8 @@ class Parser {
   state: ParserState
   fDispatch: FunctionDispatcher
   bracketParser: OrgBracketElementsParser
-  bracketNodesMap: Array<TreeParserNode> = []
-  formatNodesMap: Array<Marker | MarkerWithTextContent> = []
-  textDelimitations: Array<Array<number>> = []
   formatParser: FormatParser
+  isVerbatimMode: Boolean = false
   constructor(
     bracketParser: OrgBracketElementsParser,
     formatParser: FormatParser
@@ -76,7 +74,7 @@ type HornType =
     Nodes.sort((a, b) => a.start - b.start)
     this.fDispatch[p.type].call(this, {
       ...p,
-      glitterNodes: Nodes,
+      glitterNodes: this.isVerbatimMode ? [] : Nodes,
     })
   }
 
@@ -84,7 +82,8 @@ type HornType =
     s: string
   ): [ParsingResult, TreeParserNodes, TextDelimitations] {
     const p = this.#getParsedString(s)
-    const [n, t] = this.#getParsedNodes(p.text)
+    this.#handleVerbatim(p.type)
+    const [n, t] = this.isVerbatimMode ? [[], []] : this.#getParsedNodes(p.text)
     return [p, n, t]
   }
   #getParsedNodes(s: string): [TreeParserNodes, TextDelimitations] {
@@ -92,6 +91,14 @@ type HornType =
   }
   #getParsedString(s: string): ParsingResult {
     return new ParsableString(s).start() as ParsingResult
+  }
+  #handleVerbatim(t: HornType) {
+    if (t === "sTemplate") {
+      this.isVerbatimMode = true
+    }
+    if (t === "sTemplateEnd") {
+      this.isVerbatimMode = false
+    }
   }
 
   #footNote(p: ParsingResult) {
