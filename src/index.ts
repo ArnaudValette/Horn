@@ -45,7 +45,3 @@ function recurseInNode(x: HornNode, i?: number) {
 
 const b = performance.now()
 console.log(`TIMING: ${b - a} ms`)
-
-const node = { start: 9, end: 16, text: "[2023-10-10 Tue]", type: "date" }
-const glit = new orgDate(node as PreGlitter)
-console.log(glit)
