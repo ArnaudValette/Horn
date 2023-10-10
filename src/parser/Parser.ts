@@ -66,7 +66,7 @@ type HornType =
     */
   #qualifyLine(s: string) {
     const [p, n, sentences] = this.#getParsingResults(s)
-    const Nodes: Array<TreeParserNode | MarkerWithTextContent> = [...n]
+    const Nodes: ParsedGlitter = [...n]
     sentences.forEach((n: Array<number>) => {
       const m = this.formatParser.parse(p.text, n[0], n[1])
       if (m.length > 0) Nodes.push(...m)

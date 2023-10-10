@@ -18,6 +18,7 @@ class ParserState implements _ParserState {
   footNoteMode: string | null = null
   footNotes: Array<HornNode> = []
   footNoteId: number | null = null
+  footNoteGlitter: ParsedGlitter = []
   minLevel: number
 
   constructor() {
@@ -67,6 +68,7 @@ class ParserState implements _ParserState {
       this.table = new Table()
     }
     this.footNoteMode = null
+    this.footNoteGlitter = []
     this.srcMode = null
     this.listMode = false
     this.tableMode = false
@@ -89,7 +91,8 @@ class ParserState implements _ParserState {
     return new FootNode(
       this.count,
       this.footNoteId || 0,
-      this.footNoteMode || ""
+      this.footNoteMode || "",
+      this.footNoteGlitter
     )
   }
   HN(p: ParsingResult) {
@@ -114,14 +117,18 @@ class ParserState implements _ParserState {
     )
   }
 
-  FNModeToggle(str: string, id: number) {
+  FNModeToggle(p: ParsingResult, id: number) {
     this.resetMode()
-    this.footNoteMode = str
+    this.footNoteMode = p.text
+    this.footNoteGlitter = p.glitterNodes || []
     this.footNoteId = id
   }
-  FNAppendText(str: string) {
+  FNAppendText(p: ParsingResult) {
     if (this.footNoteMode) {
-      this.footNoteMode = this.footNoteMode.concat(str)
+      this.footNoteMode = this.footNoteMode.concat(p.text)
+      if (p.glitterNodes) {
+        this.footNoteGlitter.push(...p.glitterNodes)
+      }
     }
   }
   //It's not really appending, but rather entering a special mode of operation
@@ -129,7 +136,7 @@ class ParserState implements _ParserState {
     if (this.srcMode) {
       return this.appendParagraph(p)
     }
-    this.FNModeToggle(p.text, p.level)
+    this.FNModeToggle(p, p.level)
   }
   appendOrgCode(p: ParsingResult) {
     const h = this.HN(p)
@@ -243,7 +250,7 @@ class ParserState implements _ParserState {
       return this.lastSrc.children.push(h)
     }
     if (this.footNoteMode) {
-      return this.FNAppendText(p.text)
+      return this.FNAppendText(p)
     }
     this.resetMode()
     this.inc()
