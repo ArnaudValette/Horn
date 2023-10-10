@@ -78,17 +78,20 @@ export class TreeParserProto {
     this.nodeMap.push(node)
   }
 
-  delimitText() {
+  delimitText(len:number) {
     const nodeLimitations = this.nodeMap.map((e: TreeParserNode) => [
       e.start,
       e.end,
     ])
-    if (!nodeLimitations || nodeLimitations.length === 0) return
+    if (!nodeLimitations || nodeLimitations.length === 0) return this.textDelimitations.push([0, len])
     if (nodeLimitations[0][0] !== 0) {
       this.textDelimitations.push([0, nodeLimitations[0][0]])
     }
-    for (let i = 0, j = nodeLimitations.length - 1; i < j; i++) {
-      if (nodeLimitations[i][1] < nodeLimitations[i + 1][0] - 1) {
+    for (let i = 0, j = nodeLimitations.length; i < j; i++) {
+      if(!nodeLimitations[i+1] && nodeLimitations[i][1] < len){
+        this.textDelimitations.push([nodeLimitations[i][1], len])
+      }
+      else if (nodeLimitations[i+1] && nodeLimitations[i][1] < nodeLimitations[i + 1][0] - 1) {
         this.textDelimitations.push([
           nodeLimitations[i][1],
           nodeLimitations[i + 1][0],

@@ -6,7 +6,7 @@ import { OrgBracketElementsParser } from "../horn/OrgBracketParser"
 // TODO: it should be more logical, more focused, so that we can
 // perform the operation of passing the glitterNodes to ANY node easily
 class ParserState implements _ParserState {
-  roots: Array<HornNode | Array2D<string>>
+  roots: Array<HornNode>
   headings: Obj<HornNode>
   lists: Obj<HornNode>
   lastHeading: HornNode | null

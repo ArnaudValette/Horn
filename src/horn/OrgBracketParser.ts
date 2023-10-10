@@ -81,7 +81,7 @@ export class OrgBracketElementsParser extends TreeParserProto {
         }
       }
     }
-    this.delimitText()
+    this.delimitText(line.length)
     return [this.nodeMap, this.textDelimitations]
   }
 }
