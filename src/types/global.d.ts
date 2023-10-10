@@ -73,6 +73,7 @@ type orgBracketType =
   | "cookieRatio"
   | "date"
   | "checkboxEmpty"
+  | "checkboxCheck"
   | "image"
   | "link"
   | "footnote"

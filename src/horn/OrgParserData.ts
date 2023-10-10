@@ -16,6 +16,7 @@ export const orgTreeChars: TreeChars = [
   "[",
   ":",
   " ",
+  "X",
 ]
 
 export const orgForest: Forest = {
@@ -35,6 +36,7 @@ export const orgForest: Forest = {
     },
   },
   " ": { "]": { done: true, type: "checkboxEmpty" } },
+  X: { "]": { done: true, type: "checkboxCheck" } },
   "[": {
     any: {
       "]": {
