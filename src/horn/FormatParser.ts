@@ -26,6 +26,7 @@ export class FormatParser {
     this.markers = []
     this.line = ""
   }
+  // TODO: deal with verbatim as a blocking type to revoke any marker
   parse(line: string, start:number, end:number) {
     this.resetState()
     this.start = start
