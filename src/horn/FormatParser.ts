@@ -34,8 +34,14 @@ export class FormatParser {
     for (let i = 0, j = this.line.length; i < j; i++) {
       const char = this.line[i]
       if (this.flags[char]) {
-        const cond = this.#hasFlag(this.flags[char], this.currentFlag)
-        this.currentFlag = this.#match(i, this.flags[char], cond)
+        if(this.line[i+1] && this.line[i+1] === char){
+          // if double symbol edge case, jump over it
+          i = i+1
+        }
+        else{
+          const cond = this.#hasFlag(this.flags[char], this.currentFlag)
+          this.currentFlag = this.#match(i, this.flags[char], cond)
+        }
       }
     }
     this.#createFormatMap()
@@ -56,14 +62,14 @@ export class FormatParser {
         const m = this.markers[i]
         const m2 = this.markers[i + 1]
         this.currentFlag = m.first
-          ? this.currentFlag | m.type
-          : this.currentFlag ^ m.type
+            ? this.currentFlag | m.type
+            : this.currentFlag ^ m.type
         this.markerStack.push({
-          adjective: this.currentFlag,
-          start: m.start+this.start,
-          type: m.type,
-          end: m2.start+this.start,
-          text: this.line.substring(m.start + 1, m2.start),
+            adjective: this.currentFlag,
+            start: m.start + this.start,
+            type: m.type,
+            end: m2.start + this.start,
+            text: this.line.substring(m.start + 1, m2.start),
         })
       }
     }
