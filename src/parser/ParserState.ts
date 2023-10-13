@@ -161,7 +161,7 @@ class ParserState implements _ParserState {
     this.#trivialAppend(h, p)
   }
   appendEmpty(p: ParsingResult) {
-    const h = this.HN(p)
+    const h = this.HN({ ...p, text: "", glitterNodes: [] })
     if (this.footNoteMode) {
       const f = this.FN()
       this.footNotes.push(f)

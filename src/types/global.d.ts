@@ -24,6 +24,7 @@ type NextMethod = () => ParsingResult | NextMethod
 
 type FunctionDispatcher = Obj<(p: ParsingResult) => void>
 type HornType =
+  | "clock"
   | "heading"
   | "list"
   | "nList"

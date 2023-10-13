@@ -34,6 +34,7 @@ class Parser {
       HR: this.#HR,
       orgCode: this.#orgCode,
       footNote: this.#footNote,
+      clock: this.#empty,
     }
     this.bracketParser = bracketParser
     this.formatParser = formatParser
@@ -75,7 +76,7 @@ type HornType =
     Nodes.sort((a, b) => a.start - b.start)
     this.fDispatch[p.type].call(this, {
       ...p,
-      glitterNodes: this.#isFormatFree() ? [] : Nodes,
+      glitterNodes: this.#isFormatFree(p.type) ? [] : Nodes,
     })
   }
 
@@ -84,7 +85,7 @@ type HornType =
   ): [ParsingResult, TreeParserNodes, TextDelimitations] {
     const p = this.#getParsedString(s)
     this.#handleVerbatim(p.type)
-    const [n, t] = this.#isFormatFree()
+    const [n, t] = this.#isFormatFree(p.type)
       ? [[], []]
       : this.#getParsedNodes(p.text)
     return [p, n, t]
@@ -95,8 +96,13 @@ type HornType =
   #getParsedString(s: string): ParsingResult {
     return new ParsableString(s).start() as ParsingResult
   }
-  #isFormatFree(): Boolean {
-    return this.isOrgCodeMode || this.isVerbatimMode
+  #isFormatFree(t: HornType): Boolean {
+    return (
+      this.isOrgCodeMode ||
+      this.isVerbatimMode ||
+      t === "empty" ||
+      t === "clock"
+    )
   }
   #handleVerbatim(t: HornType) {
     this.isOrgCodeMode = t === "orgCode"

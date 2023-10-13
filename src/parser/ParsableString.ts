@@ -16,6 +16,7 @@ export class ParsableString extends String {
     orgCode: /^:\s/,
     footNote: /^\[fn:\d+\]\s/,
     paragraph: /.+/,
+    clock: /^CLOCK:\s/,
     /* secondary nodes */
   }
   constructor(s: string) {
@@ -74,7 +75,9 @@ export class ParsableString extends String {
   tSep = (): NextMethod | ParsingResult =>
     this.parse("tableSep", this.Table.bind(this))
   Table = (): NextMethod | ParsingResult =>
-    this.parse("table", this.Paragraph.bind(this))
+    this.parse("table", this.Clock.bind(this))
+  Clock = (): NextMethod | ParsingResult =>
+    this.parse("clock", this.Paragraph.bind(this))
   Paragraph = (): ParsingResult => ({
     level: 0,
     text: this.toString(),
