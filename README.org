@@ -171,6 +171,56 @@ is *bold*, /italic/, or if there's a timestamp in it, or a file and etc...
 ] 
 #+end_src
 
+**** Complex text formatting
+
+
+The parser support complex overlapping text formatting
+
+
+***** example
+
+
+: /this para*graph/ contains* complex+ text _ formatting+
+
+Is parsed like this:
+
+#+begin_src js
+  HornNode {
+    children: [],
+    glitterNodes: [
+      orgFormat { start: 0, end: 10, text: 'this para', type: 16 },
+      orgFormat { start: 10, end: 16, text: 'graph', type: 48 },
+      orgFormat { start: 16, end: 26, text: ' contains', type: 32 },
+      orgFormat { start: 26, end: 35, text: ' complex', type: 0 },
+      orgFormat {
+        start: 35,
+        end: 54,
+        text: ' text _ formatting',
+        type: 4
+      }
+    ],
+    tags: [],
+    id: 0,
+    level: 0,
+    nType: 'paragraph',
+    textContent: '/this para*graph/ contains* complex+ text _ formatting+'
+  }
+#+end_src 
+
+***** orgFormat.type
+
+GlitterNodes that allow for the parsing of the text format expresses
+the type of format via a bit flag whose specification is :
+
+: bold = 32
+: italic = 16
+: underline = 8
+: strike = 4
+: code = 2
+: verbatim = 1
+
+This allows for compound text formats (48 : bold+italic). 
+
 ** Supported syntax
 *** Greater elements | Horn-nodes
 Headlines:
