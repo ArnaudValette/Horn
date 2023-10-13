@@ -143,6 +143,7 @@ export class orgLink extends GlitterNode {
     return [this.href, this.text]
   }
 }
+
 export class orgFootnote extends GlitterNode {
   noteId: number
   constructor(g: TreeParserNode) {
@@ -158,4 +159,16 @@ export class orgFootnote extends GlitterNode {
 }
 
 //{start:0, end:15, adjective:0, type:0, text:"dddd"}
-export class Format extends GlitterNode {}
+export class Format extends GlitterNode {
+  type: number
+  constructor(g: MarkerWithTextContentAndEnd) {
+    super(g)
+    this.type = g.adjective || 0
+  }
+  getText(): string {
+    return this.text
+  }
+  getType(): number {
+    return this.type
+  }
+}

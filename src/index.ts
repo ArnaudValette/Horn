@@ -4,6 +4,7 @@
  */
 import { FormatParser } from "./horn/FormatParser"
 import {
+  Format,
   orgCookiePercent,
   orgDate,
   orgFootnote,
@@ -52,6 +53,10 @@ function recurseInNode(x: HornNode, i?: number) {
       if (g.type === "footnote") {
         const fn = new orgFootnote(g)
         console.log(fn.getId())
+      }
+      if (typeof g.type === "number") {
+        const frmt = new Format(g)
+        console.log(frmt.getType())
       }
     })
   } else {
