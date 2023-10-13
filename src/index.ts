@@ -29,7 +29,7 @@ const formatParser = new FormatParser(flags)
 const bracketParser = new OrgBracketElementsParser()
 const x = new Parser(bracketParser, formatParser)
 
-const data = fs.readFileSync("./data/ex2.org")
+const data = fs.readFileSync("./data/org-mode-test-page.org")
 x.parseOrg(data)
 
 x.state.roots.forEach((value: HornNode, index: number) => {
@@ -37,25 +37,10 @@ x.state.roots.forEach((value: HornNode, index: number) => {
 })
 
 function recurseInNode(x: HornNode, i?: number) {
-  if (i) console.log(i)
+  //  if (i) console.log(i)
   if (x.glitterNodes && x.glitterNodes.length > 0) {
     x.glitterNodes.forEach((g) => {
-      if (g.type === "image") {
-        const img = new orgImage(g)
-        console.log(img.getSrc())
-      }
-      if (g.type === "link") {
-        const link = new orgLink(g)
-        console.log(link.getHref(), link.getText())
-      }
-      if (g.type === "footnote") {
-        const fn = new orgFootnote(g)
-        console.log(fn.getId())
-      }
-      if (typeof g.type === "number") {
-        const frmt = new Format(g)
-        console.log(frmt.getText())
-      }
+      console.log(g)
     })
   } else {
     //console.log(x.nType, x.textContent)

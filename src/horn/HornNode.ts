@@ -20,10 +20,9 @@ export class HornNode {
     this.level = level
     this.nType = nType
     this.textContent = textContent
-    //@ts-ignore
     this.glitterNodes = this.processGlitterNodes(glitterNodes)
   }
-  processGlitterNodes(gN: ParsedGlitter): GlitterNode[] {
+  processGlitterNodes(gN: ParsedGlitter | undefined): GlitterNode[] {
     if (!gN) return []
     return NodesToGN(gN)
   }
