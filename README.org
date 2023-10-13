@@ -1,4 +1,7 @@
 * TS-ORG-PARSER
+* Supported syntax
+Links:
+: [[~/.emacs.d/init.el][init file]]
 * Supported nodes
 ** Greater elements | Horn-nodes [11/11]
 - [X] headlines 
