@@ -6,6 +6,7 @@ import { FormatParser } from "../horn/FormatParser"
 
 class Parser {
   state: ParserState
+  options: ParserOptions
   fDispatch: FunctionDispatcher
   bracketParser: OrgBracketElementsParser
   formatParser: FormatParser
@@ -13,7 +14,8 @@ class Parser {
   isOrgCodeMode: Boolean = false
   constructor(
     bracketParser: OrgBracketElementsParser,
-    formatParser: FormatParser
+    formatParser: FormatParser,
+    options?: ParserOptions
   ) {
     // parserState handles the glitterNodes
     // since Parser is our high-level interface, we transfer
@@ -36,8 +38,12 @@ class Parser {
       footNote: this.#footNote,
       clock: this.#empty,
     }
+    this.options = options || this.#basicOptions()
     this.bracketParser = bracketParser
     this.formatParser = formatParser
+  }
+  #basicOptions(): ParserOptions {
+    return { withLesserElements: true }
   }
 
   parseOrg(buff: Buffer) {
@@ -46,6 +52,9 @@ class Parser {
     lines.forEach((line: string) => this.#qualifyLine(line))
     this.state.transferFootNotes()
     const b = performance.now()
+    this.bracketParser.resetAll()
+    this.formatParser.resetState()
+    this.state.keepOnlyRoots()
     console.log(`TIME TAKEN : ${b - a} ms`)
   }
 
@@ -85,9 +94,10 @@ type HornType =
   ): [ParsingResult, TreeParserNodes, TextDelimitations] {
     const p = this.#getParsedString(s)
     this.#handleVerbatim(p.type)
-    const [n, t] = this.#isFormatFree(p.type)
-      ? [[], []]
-      : this.#getParsedNodes(p.text)
+    const [n, t] =
+      this.#isFormatFree(p.type) || !this.options.withLesserElements
+        ? [[], []]
+        : this.#getParsedNodes(p.text)
     return [p, n, t]
   }
   #getParsedNodes(s: string): [TreeParserNodes, TextDelimitations] {

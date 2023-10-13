@@ -25,17 +25,21 @@ let flags = {
   "=": 0b000001,
 }
 
+const memUsage = process.memoryUsage()
 const formatParser = new FormatParser(flags)
 const bracketParser = new OrgBracketElementsParser()
-const x = new Parser(bracketParser, formatParser)
+const x = new Parser(bracketParser, formatParser, { withLesserElements: true })
+// in case you don't need lesser elements and only want a rough structure
+// of the document: links, dates, bold, italic etc...
+//const x = new Parser(bracketParser, formatParser, { withLesserElements: false })
 
 const data = fs.readFileSync("./data/save.org")
 x.parseOrg(data)
 
-// x.state.roots.forEach((value: HornNode, index: number) => {
-//   recurseInNode(value, index)
-// })
-//
+x.state.roots.forEach((value: HornNode, index: number) => {
+  recurseInNode(value, index)
+})
+
 function recurseInNode(x: HornNode, i?: number) {
   if (x.glitterNodes && x.glitterNodes.length > 0) {
     x.glitterNodes.forEach((g) => {})
@@ -48,5 +52,8 @@ function recurseInNode(x: HornNode, i?: number) {
   }
 }
 
+const memUsage2 = process.memoryUsage()
+console.log(memUsage, memUsage2)
+console.dir(x.state.roots, { depth: null })
 const b = performance.now()
 console.log(`TIMING: ${b - a} ms`)

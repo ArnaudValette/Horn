@@ -22,6 +22,9 @@ type ParsingResult = {
 }
 type NextMethod = () => ParsingResult | NextMethod
 
+type ParserOptions = {
+  withLesserElements: boolean
+}
 type FunctionDispatcher = Obj<(p: ParsingResult) => void>
 type HornType =
   | "clock"

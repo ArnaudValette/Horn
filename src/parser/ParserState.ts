@@ -35,6 +35,22 @@ class ParserState implements _ParserState {
     this.minLevel = 9999999
   }
 
+  resetAllState() {
+    this.roots = []
+    this.keepOnlyRoots()
+  }
+  keepOnlyRoots() {
+    this.headings = {}
+    this.lists = {}
+    this.lastHeading = null
+    this.lastList = null
+    this.lastSrc = null
+    this.tableMode = false
+    this.listMode = false
+    this.table = new Table()
+    this.srcMode = null
+    this.minLevel = 9999999
+  }
   transferFootNotes() {
     /* This is not really what you may want
        every lesser element [fn:1] refers to
