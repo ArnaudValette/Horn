@@ -1,7 +1,7 @@
 {
-  "name": "horn",
+  "name": "Horn",
   "version": "1.0.0",
-  "description": "A small utility package to convert org files into preact app.",
+  "description": "A typescript org parser",
   "main": "build/index.js",
   "types": "build/types/types.d.ts",
   "scripts": {
