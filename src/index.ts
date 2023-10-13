@@ -39,8 +39,6 @@ x.state.roots.forEach((value: HornNode, index: number) => {
 function recurseInNode(x: HornNode, i?: number) {
   if (i) console.log(i)
   if (x.glitterNodes && x.glitterNodes.length > 0) {
-    //console.log(x.textContent)
-    //console.log(x.glitterNodes)
     x.glitterNodes.forEach((g) => {
       if (g.type === "image") {
         const img = new orgImage(g)
@@ -56,7 +54,7 @@ function recurseInNode(x: HornNode, i?: number) {
       }
       if (typeof g.type === "number") {
         const frmt = new Format(g)
-        console.log(frmt.getType())
+        console.log(frmt.getText())
       }
     })
   } else {

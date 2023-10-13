@@ -23,6 +23,38 @@ let flags = {
    i.e. a number, or a string. Depending on this type parameter, the glitterNode
    should have specific parameters.
 */
+export function NodesToGN(n: ParsedGlitter): GlitterNode[] {
+  return n.map((g: PreGlitter) => GNdispatcher(g))
+}
+
+function GNdispatcher(g: PreGlitter): GlitterNode {
+  const t = g.type
+  if (typeof t === "number") {
+    return new Format(g)
+  }
+  if (t === "image") {
+    return new orgImage(g)
+  }
+  if (t === "link") {
+    return new orgLink(g)
+  }
+  if (t === "footnote") {
+    return new orgFootnote(g)
+  }
+  if (t === "cookiePercent") {
+    return new orgCookiePercent(g)
+  }
+  if (t === "cookieRatio") {
+    return new orgCookieRatio(g)
+  }
+  if (t === "date") {
+    return new orgDate(g)
+  }
+  if (t === "checkboxEmpty" || t === "checkboxCheck") {
+    return new orgCheckBox(g)
+  }
+  return new GlitterNode(g)
+}
 
 export class GlitterNode {
   start: number
@@ -158,7 +190,6 @@ export class orgFootnote extends GlitterNode {
   }
 }
 
-//{start:0, end:15, adjective:0, type:0, text:"dddd"}
 export class Format extends GlitterNode {
   type: number
   constructor(g: MarkerWithTextContentAndEnd) {

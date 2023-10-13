@@ -1,4 +1,4 @@
-import { GlitterNode } from "./GlitterNodes"
+import { GlitterNode, NodesToGN } from "./GlitterNodes"
 
 export class HornNode {
   children: Array<HornNode> = []
@@ -23,9 +23,9 @@ export class HornNode {
     //@ts-ignore
     this.glitterNodes = this.processGlitterNodes(glitterNodes)
   }
-  processGlitterNodes(gN: ParsedGlitter) {
-    if (!gN) return
-    return gN
+  processGlitterNodes(gN: ParsedGlitter): GlitterNode[] {
+    if (!gN) return []
+    return NodesToGN(gN)
   }
   replaceTODO() {}
 }
