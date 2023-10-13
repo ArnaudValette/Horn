@@ -2,11 +2,8 @@
   "name": "horn",
   "version": "1.0.0",
   "description": "A small utility package to convert org files into preact app.",
-  "main": "index.js",
-  "files": [
-    "build",
-    "src/**/*.d.ts"
-  ],
+  "main": "build/index.js",
+  "types": "build/types/types.d.ts",
   "scripts": {
     "build": "tsc",
     "start": "npx ts-node ./src/index.ts",
