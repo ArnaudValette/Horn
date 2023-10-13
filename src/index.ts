@@ -21,21 +21,19 @@ export { FormatParser } from "./horn/FormatParser"
 //   orgImage,
 // } from "./horn/GlitterNodes"
 //
-//import * as fs from "fs"
-
-// const a = performance.now()
-// // const formatParser = new FormatParser()
-// // const bracketParser = new OrgBracketElementsParser()
-// //const x = new Parser(bracketParser, formatParser)
+// Usage:
+// import * as fs from "fs"
+// import { Parser } from "./parser/Parser"
+//
 // const x = new Parser()
 //
 // const data = fs.readFileSync("./data/example.org")
 // x.parseOrg(data)
 //
-// // x.state.roots.forEach((value: HornNode, index: number) => {
-// //   recurseInNode(value, index)
-// // })
-// //
+// x.state.roots.forEach((value: HornNode, index: number) => {
+//   recurseInNode(value, index)
+// })
+//
 // function recurseInNode(x: HornNode, i?: number) {
 //   if (x.glitterNodes && x.glitterNodes.length > 0) {
 //     x.glitterNodes.forEach((g) => {})
@@ -49,5 +47,3 @@ export { FormatParser } from "./horn/FormatParser"
 // }
 //
 // console.dir(x.state.roots, { depth: null })
-// const b = performance.now()
-// console.log(`TIMING: ${b - a} ms`)
