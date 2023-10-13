@@ -1,3 +1,11 @@
+import {
+  Flag,
+  FlagsType,
+  Marker,
+  MarkerWithTextContent,
+  MarkerWithTextContentAndEnd,
+} from "../types/types"
+
 /*
    TODO: add a markerStack.push method,
    simplify conditions for knowing if a markerStack should

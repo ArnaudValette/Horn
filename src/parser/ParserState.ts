@@ -1,5 +1,12 @@
 import Table from "../horn/Table"
 import { FootNode, HornNode, StructTemplateNode } from "../horn/HornNode"
+import {
+  Int,
+  Obj,
+  ParsedGlitter,
+  ParsingResult,
+  _ParserState,
+} from "../types/types"
 
 // TODO: it should be more logical, more focused, so that we can
 // perform the operation of passing the glitterNodes to ANY node easily

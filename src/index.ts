@@ -1,3 +1,4 @@
+export * as tsOrgParser from "./types/types"
 export { Parser } from "./parser/Parser"
 export { OrgBracketElementsParser } from "./horn/OrgBracketParser"
 export { FormatParser } from "./horn/FormatParser"
@@ -23,7 +24,9 @@ export { FormatParser } from "./horn/FormatParser"
 //
 // Usage:
 // import * as fs from "fs"
+//
 // import { Parser } from "./parser/Parser"
+// import { HornNode } from "./horn/HornNode"
 //
 // const x = new Parser()
 //

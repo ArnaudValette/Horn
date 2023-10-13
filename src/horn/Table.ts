@@ -1,3 +1,4 @@
+import { Int, ParsingResult, rowTypeEnum } from "../types/types"
 import ParserState from "../parser/ParserState"
 import { HornNode, tableRootNode, tableRowNode } from "./HornNode"
 

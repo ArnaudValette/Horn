@@ -1,3 +1,5 @@
+import { CommandMapArray, Forest, TreeChars } from "../types/types"
+
 export const orgCommandMap: CommandMapArray = [
   ["digit", (char: string) => /[0-9]/.test(char), true],
   ["Capital", (char: string) => /[A-Z]/.test(char), false],

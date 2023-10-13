@@ -1,3 +1,12 @@
+import {
+  HornType,
+  NextMethod,
+  ParsingResult,
+  R,
+  Regs,
+  Rr,
+} from "../types/types"
+
 export class ParsableString extends String {
   regs: Regs = {
     /* primary nodes */

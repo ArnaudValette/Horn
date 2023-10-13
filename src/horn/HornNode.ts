@@ -1,3 +1,4 @@
+import { ParsedGlitter, Tags } from "../types/types"
 import { GlitterNode, NodesToGN } from "./GlitterNodes"
 
 export class HornNode {

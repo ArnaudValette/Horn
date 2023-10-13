@@ -1,6 +1,5 @@
 {
-    "files":["src/types/global.d.ts", "src/parser/ParsableString.ts", "src/horn/HornNode.ts"],
-      "include": ["node_modules/@types","src/**/*"] ,
+    "include": ["node_modules/@types","src/**/*.ts", "src/**/*.d.ts"] ,
       "exclude": ["**/*.spec.ts", "out"],
   "compilerOptions": {
 
@@ -10,11 +9,11 @@
     "rootDir": "src",                              
      "moduleResolution": "node",                  
     "baseUrl": ".",                             
-      "paths": {"*": ["node_modules/*","src/types/*.d.ts", "src/*"]},                                      
-      "typeRoots": ["node_modules/@types", "src/types"],                                  
+      "paths": {"*": ["node_modules/*", "src/*"]},                                      
     "types": ["node"],                                      
     "resolveJsonModule": true,                           
-      "declaration": true,
+    "declaration": true,
+
     "allowJs": true,                                    
 
     "outDir": "build",                                 

@@ -1,3 +1,11 @@
+import {
+  MarkerWithTextContentAndEnd,
+  ParsedGlitter,
+  PreGlitter,
+  TreeParserNode,
+  orgBracketType,
+} from "../types/types"
+
 /*
 type orgBracketType =
     | "cookiePercent"
@@ -56,7 +64,7 @@ function GNdispatcher(g: PreGlitter): GlitterNode {
   return new GlitterNode(g)
 }
 
-export class GlitterNode {
+export class GlitterNode implements GlitterNode {
   start: number
   end: number
   text: string

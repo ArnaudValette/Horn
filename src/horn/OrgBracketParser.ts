@@ -33,6 +33,14 @@
  */
 
 import {
+  CommandMap,
+  TextDelimitations,
+  TreeChar,
+  TreeParserNodes,
+  parserCommand,
+  tKeys,
+} from "../types/types"
+import {
   orgCommandMap,
   orgForest,
   orgTreeChars,
