@@ -9,7 +9,7 @@ export class ParsableString extends String {
     //bSrc: /^#\+begin_src/,
     //eSrc: /^#\+end_src/,
     nSrc: /^#\+name:/,
-    table: /^(\|.*)+\|$/,
+    table: /^\|([^\|]*\|)+$/,
     tableSep: /^\|(-+\+)+-+\|$/,
     empty: /^\s*$/,
     HR: /^\s*-{5,}\s*$/,
