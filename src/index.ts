@@ -29,21 +29,19 @@ const formatParser = new FormatParser(flags)
 const bracketParser = new OrgBracketElementsParser()
 const x = new Parser(bracketParser, formatParser)
 
-const data = fs.readFileSync("./data/org-mode-test-page.org")
+const data = fs.readFileSync("./data/save.org")
 x.parseOrg(data)
 
-x.state.roots.forEach((value: HornNode, index: number) => {
-  recurseInNode(value, index)
-})
-
+// x.state.roots.forEach((value: HornNode, index: number) => {
+//   recurseInNode(value, index)
+// })
+//
 function recurseInNode(x: HornNode, i?: number) {
-  //  if (i) console.log(i)
   if (x.glitterNodes && x.glitterNodes.length > 0) {
-    x.glitterNodes.forEach((g) => {
-      console.log(g)
-    })
+    x.glitterNodes.forEach((g) => {})
+    //console.log(g)
+    //console.log(g.text)
   } else {
-    //console.log(x.nType, x.textContent)
   }
   if (x.children.length > 0) {
     x.children.forEach((y) => recurseInNode(y as HornNode))
