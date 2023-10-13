@@ -9,7 +9,7 @@
     "rootDir": "src",                              
      "moduleResolution": "node",                  
     "baseUrl": ".",                             
-      "paths": {"*": ["node_modules/*", "src/*"]},                                      
+    "paths": {"*": ["node_modules/*", "src/*"]},                                      
     "types": ["node"],                                      
     "resolveJsonModule": true,                           
     "declaration": true,
