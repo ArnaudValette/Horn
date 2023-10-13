@@ -6,6 +6,14 @@
    simplify dealing with text offset, where we're parsing a substring,
    but need to retain information about the parent string.
  */
+const defaultFlags = {
+  "*": 0b100000,
+  "/": 0b010000,
+  _: 0b001000,
+  "+": 0b000100,
+  "~": 0b000010,
+  "=": 0b000001,
+}
 export class FormatParser {
   flags: FlagsType
   markers: Array<Marker>
@@ -14,8 +22,8 @@ export class FormatParser {
   line: string = ""
   start: number = 0
   end: number = 0
-  constructor(flags: FlagsType) {
-    this.flags = flags
+  constructor(flags?: FlagsType) {
+    this.flags = flags || defaultFlags
     this.markers = []
     this.markerStack = []
     this.currentFlag = 0b000000

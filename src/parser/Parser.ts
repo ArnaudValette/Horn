@@ -13,8 +13,8 @@ class Parser {
   isVerbatimMode: Boolean = false
   isOrgCodeMode: Boolean = false
   constructor(
-    bracketParser: OrgBracketElementsParser,
-    formatParser: FormatParser,
+    bracketParser?: OrgBracketElementsParser,
+    formatParser?: FormatParser,
     options?: ParserOptions
   ) {
     // parserState handles the glitterNodes
@@ -39,8 +39,8 @@ class Parser {
       clock: this.#empty,
     }
     this.options = options || this.#basicOptions()
-    this.bracketParser = bracketParser
-    this.formatParser = formatParser
+    this.bracketParser = bracketParser || new OrgBracketElementsParser()
+    this.formatParser = formatParser || new FormatParser()
   }
   #basicOptions(): ParserOptions {
     return { withLesserElements: true }

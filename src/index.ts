@@ -16,20 +16,13 @@ import Parser from "./parser/Parser"
 import * as fs from "fs"
 
 const a = performance.now()
-let flags = {
-  "*": 0b100000,
-  "/": 0b010000,
-  _: 0b001000,
-  "+": 0b000100,
-  "~": 0b000010,
-  "=": 0b000001,
-}
 
-const formatParser = new FormatParser(flags)
-const bracketParser = new OrgBracketElementsParser()
-const x = new Parser(bracketParser, formatParser, { withLesserElements: true })
+// const formatParser = new FormatParser()
+// const bracketParser = new OrgBracketElementsParser()
+//const x = new Parser(bracketParser, formatParser)
+const x = new Parser()
 
-const data = fs.readFileSync("./data/save.org")
+const data = fs.readFileSync("./data/example.org")
 x.parseOrg(data)
 
 // x.state.roots.forEach((value: HornNode, index: number) => {
@@ -48,6 +41,6 @@ function recurseInNode(x: HornNode, i?: number) {
   }
 }
 
-//console.dir(x.state.roots, { depth: null })
+console.dir(x.state.roots, { depth: null })
 const b = performance.now()
 console.log(`TIMING: ${b - a} ms`)
