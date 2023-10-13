@@ -1,0 +1,32 @@
+* TS-ORG-PARSER
+* Supported nodes
+** Greater elements | Horn-nodes [11/11]
+- [X] headlines 
+- [X] lists
+- [X] source block
+- [X] tables
+- [X] linebreaks in lists
+- [X] horizontal rules
+- [X] org-code
+- [X] quotes
+- [X] center
+- [X] comment
+- [X] footnotes
+
+** Lesser elements | Glitter-Nodes [6/8]
+- [X] text format 
+    - [X] *bold*
+    - [X] /italic/
+    - [X] _underline_
+    - [X] +strike+
+    - [X] ~code~
+    - [X] =verbatim=
+- [ ] TODO states in headings 
+- [X] checkboxes in lists
+- [ ] timestamps [1/2]
+    - [ ] active : <2023-10-03 Tue>
+    - [X] inactive : [2023-10-03 Tue] 
+- [X] statistic cookie 
+- [X] links 
+- [X] images
+- [X] footnotes 
