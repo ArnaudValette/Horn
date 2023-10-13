@@ -1,5 +1,5 @@
 {
-  "name": "Horn",
+  "name": "org-horn-parser",
   "version": "1.0.0",
   "description": "A typescript org parser",
   "main": "build/index.js",
