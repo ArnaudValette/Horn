@@ -36,6 +36,17 @@ class ParserState implements _ParserState {
   }
 
   transferFootNotes() {
+    /* This is not really what you may want
+       every lesser element [fn:1] refers to
+       the greater element ^/[fn:1] <text>/
+
+       the orgFootnote lesser element has a noteId property,
+       the FootNode greater element has a noteId property,
+
+       An high level library that would like to create an html export
+       could create an <a href=`#fn:${noteId}`/> tag for the lesser elements
+       and later <div id=`#fn:${noteId}` /> tag for the greater element.
+    */
     this.roots.push(...this.footNotes)
   }
 

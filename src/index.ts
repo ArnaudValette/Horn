@@ -6,6 +6,7 @@ import { FormatParser } from "./horn/FormatParser"
 import {
   orgCookiePercent,
   orgDate,
+  orgFootnote,
   orgImage,
   orgLink,
 } from "./horn/GlitterNodes"
@@ -47,6 +48,10 @@ function recurseInNode(x: HornNode, i?: number) {
       if (g.type === "link") {
         const link = new orgLink(g)
         console.log(link.getHref(), link.getText())
+      }
+      if (g.type === "footnote") {
+        const fn = new orgFootnote(g)
+        console.log(fn.getId())
       }
     })
   } else {

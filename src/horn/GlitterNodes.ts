@@ -143,7 +143,19 @@ export class orgLink extends GlitterNode {
     return [this.href, this.text]
   }
 }
-export class orgFootnote extends GlitterNode {}
+export class orgFootnote extends GlitterNode {
+  noteId: number
+  constructor(g: TreeParserNode) {
+    super(g)
+    this.noteId = this.#FindNoteId(g.text)
+  }
+  #FindNoteId(d: string) {
+    return parseInt(d.substring(4, this.toString().indexOf("]")))
+  }
+  getId(): number {
+    return this.noteId
+  }
+}
 
 //{start:0, end:15, adjective:0, type:0, text:"dddd"}
 export class Format extends GlitterNode {}
