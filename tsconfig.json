@@ -14,7 +14,7 @@
       "typeRoots": ["node_modules/@types", "src/types"],                                  
     "types": ["node"],                                      
     "resolveJsonModule": true,                           
-
+      "declaration": true,
     "allowJs": true,                                    
 
     "outDir": "build",                                 

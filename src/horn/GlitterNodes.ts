@@ -30,7 +30,7 @@ export function NodesToGN(n: ParsedGlitter): GlitterNode[] {
 function GNdispatcher(g: PreGlitter): GlitterNode {
   const t = g.type
   if (typeof t === "number") {
-    return new Format(g)
+    return new orgFormat(g)
   }
   if (t === "image") {
     return new orgImage(g)
@@ -190,7 +190,7 @@ export class orgFootnote extends GlitterNode {
   }
 }
 
-export class Format extends GlitterNode {
+export class orgFormat extends GlitterNode {
   type: number
   constructor(g: MarkerWithTextContentAndEnd) {
     super(g)

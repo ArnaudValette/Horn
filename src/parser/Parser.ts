@@ -4,7 +4,7 @@ import { ParsableString } from "./ParsableString"
 import { OrgBracketElementsParser } from "../horn/OrgBracketParser"
 import { FormatParser } from "../horn/FormatParser"
 
-class Parser {
+export class Parser {
   state: ParserState
   options: ParserOptions
   fDispatch: FunctionDispatcher
@@ -171,5 +171,3 @@ type HornType =
     this.state.appendParagraph(p)
   }
 }
-
-export default Parser
