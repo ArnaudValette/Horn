@@ -18,9 +18,13 @@
 
 ## Usage
 
-
 <a id="org5d9edaa"></a>
 
+Installation :
+
+    npm install org-horn-parser
+    
+    
 ### Parsing
 
 To parse an `.org` file and print its
