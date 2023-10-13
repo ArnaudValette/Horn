@@ -3,7 +3,12 @@
    2 : translate data structure into project
  */
 import { FormatParser } from "./horn/FormatParser"
-import { orgCookiePercent, orgDate } from "./horn/GlitterNodes"
+import {
+  orgCookiePercent,
+  orgDate,
+  orgImage,
+  orgLink,
+} from "./horn/GlitterNodes"
 import { OrgBracketElementsParser } from "./horn/OrgBracketParser"
 import Parser from "./parser/Parser"
 import * as fs from "fs"
@@ -34,7 +39,16 @@ function recurseInNode(x: HornNode, i?: number) {
   if (x.glitterNodes && x.glitterNodes.length > 0) {
     //console.log(x.textContent)
     //console.log(x.glitterNodes)
-    x.glitterNodes.forEach((g) => console.log("formated: ", g.text))
+    x.glitterNodes.forEach((g) => {
+      if (g.type === "image") {
+        const img = new orgImage(g)
+        console.log(img.getSrc())
+      }
+      if (g.type === "link") {
+        const link = new orgLink(g)
+        console.log(link.getHref(), link.getText())
+      }
+    })
   } else {
     //console.log(x.nType, x.textContent)
   }

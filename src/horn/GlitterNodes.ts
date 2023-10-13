@@ -106,8 +106,43 @@ export class orgCheckBox extends GlitterNode {
     return t === "checkboxCheck"
   }
 }
-export class orgImage extends GlitterNode {}
-export class orgLink extends GlitterNode {}
+export class orgImage extends GlitterNode {
+  src: string
+  constructor(g: TreeParserNode) {
+    super(g)
+    this.src = this.#setSrc(g.text)
+  }
+  #setSrc(s: string) {
+    return s.substring(2, s.length - 2)
+  }
+  getSrc() {
+    return this.src
+  }
+}
+
+export class orgLink extends GlitterNode {
+  href: string
+  text: string
+  constructor(g: TreeParserNode) {
+    super(g)
+    const [a, b] = this.#setValues(g.text)
+    this.href = a
+    this.text = b
+  }
+  #setValues(s: string): [string, string] {
+    const x = s.substring(2, s.length - 2).split("]")
+    return [x[0], x[1].substring(1)]
+  }
+  getHref(): string {
+    return this.href
+  }
+  getText(): string {
+    return this.text
+  }
+  getValues(): [string, string] {
+    return [this.href, this.text]
+  }
+}
 export class orgFootnote extends GlitterNode {}
 
 //{start:0, end:15, adjective:0, type:0, text:"dddd"}
