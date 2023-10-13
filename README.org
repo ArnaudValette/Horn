@@ -1,35 +1,78 @@
 * TS-ORG-PARSER
 * Supported syntax
+** Greater elements | Horn-nodes
+Headlines:
+: * H1
+: ** H2
+: . . .
+
+Lists:
+: - a
+: 
+: - b
+:   - b1
+:   - b2
+:     - b2.a
+:   - b3
+: . . .
+
+Blocks:
+: #+begin_src js
+:  . . .
+: #+end_src
+
+: #+begin_quote
+: . . .
+: #+end_quote
+
+Tables:
+: |   |   |   |   |   |
+: |---+---+---+---+---|
+: |   |   |   |   |   |
+
+Horizontal rules:
+: -----
+
+Org code:
+: : some code...
+
+Footnotes:
+: [fn:1] some text ...
+
+** Lesser elements | Glitter-Nodes 
+
+Formatted text:
+: /italic/ *bold* _underline_ +strike+ ~code~ =verbatim=
+
+Overlapping text format:
+: /italic *bold italic/ only bold*
+: /italic _ italic + strike italic *bold strike italic+*/
+
+Checkboxes:
+: [ ] unchecked
+: [X] checked
+
+Timestamps:
+: [2023-10-03 Tue]
+
+Statistic cookies:
+: - [1/3]
+: - [ ] a
+: - [X] b
+: - [ ] c
+:
+: - [25%]
+: - [X] a
+: - [ ] b
+: - [ ] c
+: - [ ] d
+
 Links:
 : [[~/.emacs.d/init.el][init file]]
-* Supported nodes
-** Greater elements | Horn-nodes [11/11]
-- [X] headlines 
-- [X] lists
-- [X] source block
-- [X] tables
-- [X] linebreaks in lists
-- [X] horizontal rules
-- [X] org-code
-- [X] quotes
-- [X] center
-- [X] comment
-- [X] footnotes
+: [[https://github.com][github]]
 
-** Lesser elements | Glitter-Nodes [6/8]
-- [X] text format 
-    - [X] *bold*
-    - [X] /italic/
-    - [X] _underline_
-    - [X] +strike+
-    - [X] ~code~
-    - [X] =verbatim=
-- [ ] TODO states in headings 
-- [X] checkboxes in lists
-- [ ] timestamps [1/2]
-    - [ ] active : <2023-10-03 Tue>
-    - [X] inactive : [2023-10-03 Tue] 
-- [X] statistic cookie 
-- [X] links 
-- [X] images
-- [X] footnotes 
+Images:
+: [[~/image.png]]
+
+Footnote calls:
+: ...some text [fn:1] some text...
