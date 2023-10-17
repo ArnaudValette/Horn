@@ -34,7 +34,10 @@ structure :
     import * as fs from "fs"
     
     const p:Parser= new Parser()
-    p.parseOrg("/path/to/file...")
+   
+    const d = fs.readFileSync("path/to/file")
+   
+    p.parseOrg(d)
     
     console.dir(p.state.roots,  {depth: null})
 
