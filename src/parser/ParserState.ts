@@ -206,7 +206,6 @@ class ParserState implements _ParserState {
   appendHeading(p: ParsingResult) {
     this.resetMode()
     const h = this.HN(p)
-
     if (p.level <= this.minLevel) {
       this.minLevel = p.level
       this.roots.push(h)
@@ -311,10 +310,10 @@ class ParserState implements _ParserState {
     }
   }
 
-  mostRecentHeading(level: Int) {
+  mostRecentHeading(level: Int){
     let result
-    for (let i = 0, maxId = 0; i < level; i++) {
-      if (this.headings[i]?.id > maxId) {
+    for (let i = 1, maxId = -1; i < level; i++) {
+      if (this.headings[i].id > maxId) {
         maxId = this.headings[i].id
         result = this.headings[i]
       }
