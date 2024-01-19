@@ -30,7 +30,7 @@ Installation :
 To parse an `.org` file and print its
 structure :
 
-    import {Parser} from "Horn"
+    import {Parser} from "org-horn-parser"
     import * as fs from "fs"
     
     const p:Parser= new Parser()
