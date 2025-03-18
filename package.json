@@ -1,6 +1,6 @@
 {
   "name": "org-horn-parser",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A typescript org parser",
   "main": "build/index.js",
   "types": "build/types/types.d.ts",
