@@ -102,6 +102,7 @@ export type orgBracketType =
   | "checkboxCheck"
   | "image"
   | "link"
+  | "lineBreak"
   | "footnote"
 
 export interface orgBracketNode {

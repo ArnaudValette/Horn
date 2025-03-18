@@ -19,9 +19,13 @@ export const orgTreeChars: TreeChars = [
   ":",
   " ",
   "X",
+  "\\",
 ]
 
 export const orgForest: Forest = {
+  "\\": {
+    n: { "]": { done: true, type: "lineBreak" } },
+  },
   digit: {
     "%": { "]": { done: true, type: "cookiePercent" } },
     "/": { digit: { "]": { done: true, type: "cookieRatio" } } },

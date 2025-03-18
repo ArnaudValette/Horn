@@ -61,6 +61,9 @@ function GNdispatcher(g: PreGlitter): GlitterNode {
   if (t === "checkboxEmpty" || t === "checkboxCheck") {
     return new orgCheckBox(g)
   }
+  if (t === "lineBreak") {
+    return new orgLineBreak(g)
+  }
   return new GlitterNode(g)
 }
 
@@ -77,7 +80,6 @@ export class GlitterNode implements GlitterNode {
   }
 }
 
-//{ start: 9, end: 16, text: '[28%]', type: 'cookiePercent' }
 export class orgCookiePercent extends GlitterNode {
   percentage: number
   constructor(g: TreeParserNode) {
@@ -157,6 +159,12 @@ export class orgImage extends GlitterNode {
   }
   getSrc() {
     return this.src
+  }
+}
+
+export class orgLineBreak extends GlitterNode {
+  constructor(g: TreeParserNode) {
+    super(g)
   }
 }
 
